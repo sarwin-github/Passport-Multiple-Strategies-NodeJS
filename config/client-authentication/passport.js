@@ -49,15 +49,15 @@ passport.use('local.client.signup', new LocalStrategy({
 		newClient.local.isClient = true;
 
 		newClient.local.name = req.body.name;
-		newTrainer.local.age = req.body.age;
-		newTrainer.local.birthday = req.body.birthday;
-		newTrainer.local.address = req.body.address;
+		newClient.local.age = req.body.age;
+		newClient.local.birthday = req.body.birthday;
+		newClient.local.address = req.body.address;
 
-		newTrainer.save((err,result) => {
+		newClient.save((err,result) => {
 			if(err){
 				return done(err);
 			}
-			return done(null, newTrainer);
+			return done(null, newClient);
 		});
 	});
 }));

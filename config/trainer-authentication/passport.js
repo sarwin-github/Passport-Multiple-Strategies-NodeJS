@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Trainer = require('../../app/model/trainer');
+const Client = require('../../app/model/client');
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Serialize user for creating user session/trainer session
@@ -9,12 +10,28 @@ passport.serializeUser((user,done) => {
 	done(null, user.id);
 });
 
-// deserialize user
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Deserialize the user and check wheter the serialize key equivalient is for trainer or client
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 passport.deserializeUser((id, done) => {
-	Trainer.findById(id, (err, user) => {
-		done(err, user);
-	});
+
+    Trainer.findById(id, function (err, user) {
+         if(err)
+             done(err);
+         if(user) {
+             done(null, user);
+         }
+         else {
+             Client.findById(id, function (err, user) {
+                 if(err)
+                     done(err);
+                 done(null, user);
+             });
+         }
+     });
 });
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Passport Strategy for creating new Trainer
