@@ -63,7 +63,6 @@ passport.use('local.trainer.signup', new LocalStrategy({
         return done(null, false, req.flash('error', messages));
     }
 
-  
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//A query that will search for an existing trainer in the mongo database, then after everything is validated, create new trainer
 	//Find local.email from the database of trainer
