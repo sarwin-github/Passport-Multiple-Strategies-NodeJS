@@ -18,16 +18,8 @@ router.get('/login', (req, res) => {
     
     //Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
-    res.render('accounts/trainer/login', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
+    res.render('accounts/client/login', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
 });
-
-router.post('/login', passport.authenticate('local.trainer.login', {
-    //If passport is successful in authenticating login, redirect to trainer profile
-    successRedirect: '/trainer/profile',
-    //If passport failed in authenticating login redirect to login page again
-    failureRedirect: '/trainer/login',
-    failureFlash: true
-}));
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -38,25 +30,26 @@ router.get('/signup', (req, res) => {
     
     //Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
-    res.render('accounts/trainer/signup', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 });
+    res.render('accounts/client/signup', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 });
 });
 
-router.post('/signup', passport.authenticate('local.trainer.signup', {
-    //If passport is successful in authenticating signup, redirect to trainer profile
-    successRedirect: '/trainer/profile',
+router.post('/signup', passport.authenticate('local.client.signup', {
+    //If passport is successful in authenticating signup, redirect to client profile
+    successRedirect: '/client/profile',
     //If passport failed in authenticating signup, redirect to sign up page again
-    failureRedirect: '/trainer/signup',
+    failureRedirect: '/client/signup',
     failureFlash: true
 }));
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the Trainer Profile Page, to pass the data to react use the res.json/ response.json
 // The req.user is the data of user created by passport, 
-// you can access the trainer data using, user.local.email if you want to see the email of the trainer
+// you can access the client data using, user.local.email if you want to see the email of the client
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/profile', isLoggedIn, (req, res) => {
     //res.json({user: req.user})
-    res.render('accounts/trainer/profile.ejs', {
+    res.render('accounts/client/profile.ejs', {
         user : req.user 
     });
 });

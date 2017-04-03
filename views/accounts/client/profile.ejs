@@ -26,12 +26,13 @@
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>email</strong>: <%= user.local.email %><br>
                         <strong>name</strong>: <%= user.local.name %><br>
-                        <strong>description</strong>: <%= user.local.description %><br>
+                        <strong>Age</strong>: <%= user.local.age %><br>
+                        <strong>Birthday</strong>: <%= user.local.age %><br>
                         <strong>specialization</strong>: 
                         <!-- For each loops that itterate and display each specialization of the trainer-->
-                        <% user.local.specialization.forEach(function(specializeIn){ %>
+                        <% user.local.addresses.forEach(function(address){ %>
                             <ul>
-                                <%= specializeIn%>
+                                <%= address %>
                             </ul>
                         <%});%>
                     </p>

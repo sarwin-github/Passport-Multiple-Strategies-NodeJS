@@ -1,15 +1,18 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 
-var clientSchema = mongoose.Schema({
+const clientSchema = mongoose.Schema({
 	//Data for local authentication
 	local: {
 		//login email and password
-		email 		 	: String,
+		email 		 	: { type: String, required: true },
 		password 	 	: String,
 		//account info
         isClient    	: Boolean,
         name 		 	: String,
+        age             : String,
+        birthday        : Date,
+        address         : [String]
 	},
 	//Data for oauth using facebook
 	facebook         : {

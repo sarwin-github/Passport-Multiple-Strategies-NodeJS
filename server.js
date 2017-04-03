@@ -59,15 +59,21 @@ app.use(function(req, res, next) {
 });
 
 require('./config/trainer-authentication/passport');
+require('./config/client-authentication/passport');
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Set Routes
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const TrainerRoute = require('./app/routes/trainer');
+const ClientRoute = require('./app/routes/client');
 const IndexRoute = require('./app/routes/index');
 
 app.use('/', IndexRoute);
 app.use('/trainer', TrainerRoute);
+app.use('/client', ClientRoute);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Added Error Handler
+// Added Error Handler
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 app.use((req, res, next) =>{
 	var err = new Error('Not Found');
@@ -83,6 +89,9 @@ app.use((err, req, res, next) => {
 	res.render('error');
 });
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Create Server
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 http.createServer(app).listen(app.get('port'), () => {
 	console.log(`Server Listening to Port: ${app.get('port')}`);
 })
