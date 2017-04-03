@@ -7,14 +7,25 @@ const csrf = require('csurf');
 function to make a token which should be added to requests which mutate state, within a hidden form field, 
 query-string etc. This token is validated against the visitor's session or csrf cookie.*/
 
-var csrfProtection = csrf();
+const csrfProtection = csrf();
 router.use(csrfProtection);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// A middleware that will check if the user trying to log in is indeed a trainer
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+const isTrainer = (req, res, next) => {
+    if(req.user.local.isTrainer === true){
+        return next();
+    }
+    res.redirect('/trainer/login');
+}
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the Login Page, to pass the data to react use the res.json/ response.json
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/login', (req, res) => {
-    var messages = req.flash('error');
+    let messages = req.flash('error');
     
     //Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
@@ -34,7 +45,7 @@ router.post('/login', passport.authenticate('local.trainer.login', {
 // This will render the Sign up Page, to pass the data to react use the res.json/ response.json
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/signup', (req, res) => {
-    var messages = req.flash('error');
+    let messages = req.flash('error');
     
     //Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
@@ -54,7 +65,7 @@ router.post('/signup', passport.authenticate('local.trainer.signup', {
 // The req.user is the data of user created by passport, 
 // you can access the trainer data using, user.local.email if you want to see the email of the trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-router.get('/profile', isLoggedIn, (req, res) => {
+router.get('/profile', isLoggedIn, isTrainer, (req, res) => {
     //res.json({user: req.user})
     res.render('accounts/trainer/profile.ejs', {
         user : req.user 
@@ -76,6 +87,6 @@ function isLoggedIn(req, res, next){
     if(req.isAuthenticated())
         return next();
     res.redirect('/');
-}
+};
 
 module.exports = router;

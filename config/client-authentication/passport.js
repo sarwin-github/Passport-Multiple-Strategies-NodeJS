@@ -11,6 +11,7 @@ passport.use('local.client.signup', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, (req, email, password, done) => {
+	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//Check if email or password is empty, then validate error using the express-validator module
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -100,7 +101,7 @@ passport.use('local.client.login', new LocalStrategy({
     	if(!client.validPassword(password)){
     		return done(null, false, { message: 'Password is invalid, Please check your password and try again.'});
     	}
-    	
+
     	return done(null, client)
     });
 }));
