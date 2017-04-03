@@ -14,7 +14,7 @@ router.use(csrfProtection);
 // A middleware that will check if the user trying to log in is indeed a client
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const isClient = (req, res, next) => {
-    if(req.user.local.isClient === true){
+    if(req.user.local.isClient === true || req.user.facebook.email){
         return next();
     }
     res.redirect('/client/login');
@@ -71,6 +71,20 @@ router.get('/profile', isLoggedIn, isClient, (req, res) => {
         user : req.user 
     });
 });
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Facebook Authentication
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+router.get('/auth/facebook', passport.authenticate('facebook.client', { scope : 'email' }));
+
+ // handle the callback after facebook has authenticated the user
+    router.get('/auth/facebook/callback',
+        passport.authenticate('facebook.client', {
+            successRedirect : '/client/profile',
+            failureRedirect : '/'
+        }));
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // You will be redirected to landing page or home page, You will be logged out and sessions will be destroyed

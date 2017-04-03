@@ -15,15 +15,15 @@ const http = require('http');
 const app = express();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Add database connection
+//Set database connection
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const mongoose = require('mongoose');
 const mongoStore = require('connect-mongo')(session);
 const mongoConnectionLocal = 'mongodb://localhost:27017/fitness-marketapp-DB';
-const mongoConnectionOnline = 'mongodb://user:password@ds141490.mlab.com:41490/fitness-marketapp-DB';
+const mongoConnectionOnline = 'mongodb://fitness-marketapp-user:34dffYMoEjR9Wt1RK5H6DCOA9FCz40KU@ds119588.mlab.com:19588/fitness-marketapp-db';
 
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoConnectionLocal, (err, database) => { if(err) { console.log(err); }});
+mongoose.connect(mongoConnectionOnline, (err, database) => { if(err) { console.log(err); }});
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Set port, view engine and session
@@ -78,7 +78,7 @@ app.use('/trainer', TrainerRoute);
 app.use('/client', ClientRoute);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Added Error Handler
+// Set Error Handler
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 app.use((req, res, next) => {
 	var err = new Error('Not Found');

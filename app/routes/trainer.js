@@ -14,7 +14,7 @@ router.use(csrfProtection);
 // A middleware that will check if the user trying to log in is indeed a trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const isTrainer = (req, res, next) => {
-    if(req.user.local.isTrainer === true){
+    if(req.user.local.isTrainer === true || req.user.facebook.email){
         return next();
     }
     res.redirect('/trainer/login');
@@ -60,17 +60,32 @@ router.post('/signup', passport.authenticate('local.trainer.signup', {
     failureFlash: true
 }));
 
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the Trainer Profile Page, to pass the data to react use the res.json/ response.json
 // The req.user is the data of user created by passport, 
 // you can access the trainer data using, user.local.email if you want to see the email of the trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-router.get('/profile', isLoggedIn, isTrainer, (req, res) => {
+router.get('/profile', isLoggedIn, /*isTrainer,*/ (req, res) => {
     //res.json({user: req.user})
     res.render('accounts/trainer/profile.ejs', {
         user : req.user 
     });
 });
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Facebook Authentication
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+router.get('/auth/facebook', passport.authenticate('facebook.trainer', { scope : 'email' }));
+
+ // handle the callback after facebook has authenticated the user
+    router.get('/auth/facebook/callback',
+        passport.authenticate('facebook.trainer', {
+            successRedirect : '/trainer/profile',
+            failureRedirect : '/'
+        }));
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // You will be redirected to landing page or home page, You will be logged out and sessions will be destroyed
@@ -79,6 +94,7 @@ router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
 });
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Route middleware to make sure a user is logged in

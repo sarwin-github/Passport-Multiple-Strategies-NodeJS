@@ -5,7 +5,7 @@ const trainerSchema = mongoose.Schema({
 	//Data for local authentication
 	local: {
 		//login email and password
-		email 		 	: { type: String, required: true },
+		email 		 	: String,
 		password 	 	: String,
 		//account info
         isTrainer    	: Boolean,
