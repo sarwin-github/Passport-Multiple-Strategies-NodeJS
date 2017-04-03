@@ -1,3 +1,6 @@
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Add required modules
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const express = require('express');
 const session = require('express-session');
 const validator = require('express-validator');
@@ -11,6 +14,9 @@ const passport = require('passport');
 const http = require('http');
 const app = express();
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Add database connection
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const mongoose = require('mongoose');
 const mongoConnectionLocal = 'mongodb://localhost:27017/fitness-marketapp-DB';
 const mongoConnectionOnline = 'mongodb://user:password@ds141490.mlab.com:41490/fitness-marketapp-DB';
@@ -18,13 +24,18 @@ const mongoConnectionOnline = 'mongodb://user:password@ds141490.mlab.com:41490/f
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoConnectionLocal, (err, database) => { if(err) { console.log(err); }});
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Set port, view engine and session
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 app.set('port', process.env.PORT || 3001);
 
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(validator());
+app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -36,11 +47,28 @@ app.use(session({
 	  	saveUninitialized: false, 
 }));
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Initialize Passport
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
-app.use(morgan('dev'));
 
+app.use(function(req, res, next) {
+    res.locals.login = req.isAuthenticated();
+    next();
+});
+
+require('./config/trainer-authentication/passport');
+
+const TrainerRoute = require('./app/routes/trainer');
+const IndexRoute = require('./app/routes/index');
+
+app.use('/', IndexRoute);
+app.use('/trainer', TrainerRoute);
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Added Error Handler
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 app.use((req, res, next) =>{
 	var err = new Error('Not Found');
 	err.status = 404;
