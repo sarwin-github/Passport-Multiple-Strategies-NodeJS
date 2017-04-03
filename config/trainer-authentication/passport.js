@@ -68,14 +68,14 @@ passport.use('local.trainer.signup', new LocalStrategy({
 	//A query that will search for an existing trainer in the mongo database, then after everything is validated, create new trainer
 	//Find local.email from the database of trainer
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    Trainer.findOne({'local.email': email}, (err, user)  => {
+    Trainer.findOne({'local.email': email}, (err, trainer)  => {
         if (err) {
             return done(err);
         }
-        if (user) {
+        if (trainer) {
             return done(null, false, {message: 'That email is already taken!'});
         }
-        //After everything is validated, Create new user
+        //After everything is validated, Create new trainer
         var newTrainer = new Trainer();
 
         newTrainer.local.email = email;
@@ -84,6 +84,9 @@ passport.use('local.trainer.signup', new LocalStrategy({
 
         newTrainer.local.name = req.body.name;
         newTrainer.local.description = req.body.description;
+        newTrainer.local.age = req.body.age;
+        newTrainer.local.birthday = req.body.birthday;
+        newTrainer.local.address = req.body.address;
         newTrainer.local.specialization = req.body.specialization;
 
         newTrainer.save((err, result)  => {
@@ -127,16 +130,16 @@ passport.use('local.trainer.login', new LocalStrategy({
 	//A query that will search for an existing trainer in the mongo database, then after everything is validated, Log in the user
 	//Find local.email from the database of trainer
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    Trainer.findOne({'local.email': email}, (err, user) => {
+    Trainer.findOne({'local.email': email}, (err, trainer) => {
         if (err) {
             return done(err);
         }
-        if (!user) {
-            return done(null, false, { message: 'The trainer does not exist. Click sign up to register a trainer.'});
+        if (!trainer) {
+            return done(null, false, { message: 'The trainer does not exist. Click sign up to register as a trainer.'});
         }
-        if (!user.validPassword(password)) {
+        if (!trainer.validPassword(password)) {
             return done(null, false, { message: 'Password is invalid, Please check your password and try again.'});
         }
-        return done(null, user);
+        return done(null, trainer);
     });
 }));

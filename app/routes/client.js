@@ -21,6 +21,13 @@ router.get('/login', (req, res) => {
     res.render('accounts/client/login', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
 });
 
+router.post('/login', passport.authenticate('local.client.login', {
+    //If passport is successful in authenticating login, redirect to client profile
+    successRedirect: '/client/profile',
+    //If passport failed in authenticating login redirect to login page again
+    failureRedirect: '/client/login',
+    failureFlash: true
+}));
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the Sign up Page, to pass the data to react use the res.json/ response.json

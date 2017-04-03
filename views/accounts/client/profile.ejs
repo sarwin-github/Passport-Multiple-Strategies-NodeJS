@@ -27,12 +27,12 @@
                         <strong>email</strong>: <%= user.local.email %><br>
                         <strong>name</strong>: <%= user.local.name %><br>
                         <strong>Age</strong>: <%= user.local.age %><br>
-                        <strong>Birthday</strong>: <%= user.local.age %><br>
-                        <strong>specialization</strong>: 
+                        <strong>Birthday</strong>: <%= user.local.birthday.toLocaleDateString("en-US") %><br>
+                        <strong>Address</strong>: 
                         <!-- For each loops that itterate and display each specialization of the trainer-->
-                        <% user.local.addresses.forEach(function(address){ %>
+                        <% user.local.address.forEach(function(addresses){ %>
                             <ul>
-                                <%= address %>
+                                <%= addresses %>
                             </ul>
                         <%});%>
                     </p>
