@@ -18,6 +18,7 @@ const app = express();
 //Add database connection
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const mongoose = require('mongoose');
+const mongoStore = require('connect-mongo')(session);
 const mongoConnectionLocal = 'mongodb://localhost:27017/fitness-marketapp-DB';
 const mongoConnectionOnline = 'mongodb://user:password@ds141490.mlab.com:41490/fitness-marketapp-DB';
 
@@ -41,10 +42,13 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname));
 
+//Set session and cookie max life, store session in mongo database
 app.use(session({
 		secret: "53BBCA1D5814C7342D9725AF82178",    
 		resave: true,
 	  	saveUninitialized: false, 
+		store: new mongoStore({ mongooseConnection: mongoose.connection }),
+		cookie: { maxAge: 60 * 60 * 1000}
 }));
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -55,6 +59,7 @@ app.use(passport.session());
 
 app.use(function(req, res, next) {
     res.locals.login = req.isAuthenticated();
+    res.locals.session = req.session;
     next();
 });
 
@@ -75,7 +80,7 @@ app.use('/client', ClientRoute);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Added Error Handler
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-app.use((req, res, next) =>{
+app.use((req, res, next) => {
 	var err = new Error('Not Found');
 	err.status = 404;
 	next(err);
