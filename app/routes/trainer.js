@@ -19,7 +19,9 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local.trainer.login', {
+    //If passport is successful in authenticating login, redirect to trainer profile
     successRedirect: '/trainer/profile',
+    //If passport failed in authenticating login redirect to login page again
     failureRedirect: '/trainer/login',
     failureFlash: true
 }));
@@ -33,7 +35,9 @@ router.get('/signup', (req, res) => {
 });
 
 router.post('/signup', passport.authenticate('local.trainer.signup', {
+    //If passport is successful in authenticating signup, redirect to trainer profile
     successRedirect: '/trainer/profile',
+    //If passport failed in authenticating signup, redirect to sign up page again
     failureRedirect: '/trainer/signup',
     failureFlash: true
 }));

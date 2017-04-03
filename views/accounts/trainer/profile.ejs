@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
-        body        { padding-top:80px; word-wrap:break-word; }
+        body { word-wrap:break-word; }
     </style>
 </head>
 <body>
@@ -21,11 +21,19 @@
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-6">
             <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3>
+                <h3><span class="fa fa-user"></span> Trainer Profile</h3>
                     <p>
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>email</strong>: <%= user.local.email %><br>
-                        <strong>password</strong>: <%= user.local.password %>
+                        <strong>name</strong>: <%= user.local.name %><br>
+                        <strong>description</strong>: <%= user.local.description %><br>
+                        <strong>specialization</strong>: 
+                        <!-- For each loops that itterate and display each specialization of the trainer-->
+                        <% user.local.specialization.forEach(function(specializeIn){ %>
+                            <ul>
+                                <%= specializeIn%>
+                            </ul>
+                        <%});%>
                     </p>
             </div>
         </div>

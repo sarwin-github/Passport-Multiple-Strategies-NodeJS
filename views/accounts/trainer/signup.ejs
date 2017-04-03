@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <style>
-        body        { padding-top:80px; }
+        body        { padding-top:20px; }
     </style>
 </head>
 <body>
@@ -23,16 +23,44 @@
 
     <!-- LOGIN FORM -->
     <form action="/trainer/signup" method="post">
+        <!-- Account Details -->
+        <Legend>Account Details</Legend>
         <div class="form-group">
             <label>Email</label>
             <input type="text" class="form-control" name="email">
         </div>
+
         <div class="form-group">
             <label>Password</label>
             <input type="password" class="form-control" name="password">
         </div>
+        <!-- Profile Details -->
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+
+        <div class="form-group">
+            <label>About Trainer</label>
+            <input type="text" class="form-control" name="description">
+        </div>
+
+        <Legend>Specialization</Legend>
+        <div class="form-group">
+            <input type="text" class="form-control" name="specialization">
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="specialization">
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" name="specialization">
+        </div>
+
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+
     </form>
 
     <hr>

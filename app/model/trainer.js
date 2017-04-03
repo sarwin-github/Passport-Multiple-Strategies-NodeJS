@@ -11,8 +11,8 @@ var trainerSchema = mongoose.Schema({
         isTrainer    	: Boolean,
         name 		 	: String,
         description	 	: String,
-        specialization	: String,
-        gymAddress		: String
+        specialization	: [String],
+        gymInfo		    : String
 	},
 	//Data for oauth using facebook
 	facebook         : {

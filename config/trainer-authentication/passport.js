@@ -53,6 +53,10 @@ passport.use('local.trainer.signup', new LocalStrategy({
         newTrainer.local.password = newTrainer.generateHash(password);
         newTrainer.local.isTrainer = true;
 
+        newTrainer.local.name = req.body.name;
+        newTrainer.local.description = req.body.description;
+        newTrainer.local.specialization = req.body.specialization;
+
         newTrainer.save((err, result)  => {
            if (err) {
                return done(err);
