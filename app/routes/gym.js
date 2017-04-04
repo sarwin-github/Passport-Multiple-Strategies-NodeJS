@@ -124,6 +124,7 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// This will update the trainer's gym information as gym information will be empty for newly created trainers
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	///create a session for the new created gym so that the trainer that will be updated can access the object id of the gym
 	req.session.gym = newGym;
 
 	let query = Trainer.findOne({ _id: req.user._id });
