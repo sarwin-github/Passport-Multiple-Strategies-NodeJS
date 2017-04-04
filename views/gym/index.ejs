@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <title>Fitness Market App</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <style>
+        body { padding-top:10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+
+    <% if(gym == null){%>
+        <h2> Gym is currently empty!</h2>
+    <% } %>
+
+    <% if(gym){%>
+    <h2>List of Gym</h2>
+    <% } %>
+    <!-- Get the list of gym -->
+    <% gym.forEach(function(gymInfo){%>
+        <div class="col-md-4">  
+            <%= gymInfo.name %> 
+            <%= gymInfo.description %>
+            <!-- Get the list of trainer available for this Gym -->
+                <dl>
+                    <dd>Trainer: <%= gymInfo.trainers.local.name %></dd>
+                    <dd>Email:<%= gymInfo.trainers.local.email %></dd>
+                    <dd>Specialize in: <%= gymInfo.trainers.local.specialization %></dd>
+                    <dd><img src="<%= gymInfo.image%>" class="img-responsive" width="300"></img></dd>
+                    <hr>
+                    <dd><a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-danger btn-sm">View Trainers Profile</a></dd>
+                </dl> 
+        </div>
+    <%});%>
+    </div>
+
+
+</div>
+</body>
+</html>

@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const csrf = require('csurf');
-
+const Trainer = require('../../app/model/trainer');
+const Gym = require('../../app/model/gym');
 /* Create a middleware for CSRF token creation and validation. This middleware adds a req.csrfToken() 
 function to make a token which should be added to requests which mutate state, within a hidden form field, 
 query-string etc. This token is validated against the visitor's session or csrf cookie.*/
@@ -66,11 +67,42 @@ router.post('/signup', passport.authenticate('local.trainer.signup', {
 // The req.user is the data of user created by passport, 
 // you can access the trainer data using, user.local.email if you want to see the email of the trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-router.get('/profile', isLoggedIn, /*isTrainer,*/ (req, res) => {
-    //res.json({user: req.user})
-    res.render('accounts/trainer/profile.ejs', {
-        user : req.user 
+router.get('/profile', isLoggedIn, isTrainer, (req, res) => {
+    var query = Gym.findOne({ trainers:  { $elemMatch: { email:req.user.local.email }}})
+                .select({'__v': 0});
+
+    query.exec((err, gym) => {
+        if(err){
+            return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+        }
+        if(!gym){
+            return res.status(200).send({success: false, message: "Record for that gym does not exist"});
+        }
+
+        //res.json({user: req.user})
+        res.render('accounts/trainer/profile.ejs', {
+            user : req.user, gym: gym
+        });
+    });   
+});
+
+router.get('/profile/:id', /*isTrainer,*/ (req, res) => {
+    var query = Trainer.findById({ _id: req.params.id })
+                .select({'__v': 0});
+
+    query.exec((err, trainer) => {
+        if(err){
+            return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+        }
+        if(!trainer){
+            return res.status(200).send({success: false, message: "Record for that trainer does not exist"});
+        }
+
+        //res.json({user: req.user, trainer: trainer})
+        res.render('accounts/trainer/profile-client-view.ejs', {user: req.user, trainer: trainer});
     });
+
+  
 });
 
 

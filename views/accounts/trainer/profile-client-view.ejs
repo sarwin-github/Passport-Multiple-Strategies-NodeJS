@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <title>Fitness Market App</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <style>
+    body { word-wrap:break-word; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+
+      <!-- LOCAL INFORMATION -->
+      <div class="col-sm-12">
+        <div class="well">
+          <h3><span class="fa fa-user"></span> Trainer Profile</h3>
+          <p>
+            <strong>email</strong>: <%= trainer.local.email %><br>
+            <strong>name</strong>: <%= trainer.local.name %><br>
+            <strong>description</strong>: <%= trainer.local.description %><br>
+            <strong>specialization</strong>: 
+            <!-- For each loops that itterate and display each specialization of the trainer-->
+            <% trainer.local.specialization.forEach(function(specializeIn){ %>
+                <span class="label label-warning">#<%= specializeIn %></span>
+            <%});%>
+            </p>
+          </div>
+        </div>
+
+        <hr>
+        <a href="/gym" class="btn btn-primary">View List of Gym</a>
+
+     </div>
+
+
+   </div>
+ </body>
+ </html>
