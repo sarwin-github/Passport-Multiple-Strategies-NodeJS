@@ -27,7 +27,9 @@ const isClient = (req, res, next) => {
 router.get('/login', (req, res) => {
     let messages = req.flash('error');
     
+    ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
     req.session.type = "/client";
+
     ///Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
     res.render('accounts/client/login', 
@@ -54,7 +56,9 @@ router.post('/login', passport.authenticate('local.client.login', {
 router.get('/signup', (req, res) => {
     let messages = req.flash('error');
     
+    ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
     req.session.type = "/client";
+
     ///Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
     res.render('accounts/client/signup', 
@@ -93,7 +97,7 @@ router.get('/profile', isLoggedIn, isClient, (req, res) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/auth/facebook', passport.authenticate('facebook.client', { scope : 'email', }));
 
- ///handle the callback after facebook has authenticated the user
+    ///handle the callback after facebook has authenticated the user
     router.get('/auth/facebook/callback',
         passport.authenticate('facebook.client', {
             successRedirect : '/client/profile',

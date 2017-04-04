@@ -1,13 +1,23 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-
 const bcrypt = require('bcrypt-nodejs');
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Regex for email validation
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+var validateEmail = function(email) {
+    var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return regex.test(email);
+};
+
 
 const trainerSchema = mongoose.Schema({
 	//Data for local authentication
 	local: {
 		//login email and password
-		email 		 	: String,
+		email 		 	: { type: String, unique: true, 
+                            validate: [validateEmail, 'Please fill a valid email address'],
+                            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']},
 		password 	 	: String,
 		//account info
         isTrainer    	: Boolean,

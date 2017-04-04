@@ -29,9 +29,11 @@ router.get('/login', (req, res) => {
     let messages = req.flash('error');
     let facebookWarning = req.flash('message');
     
+    ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
+    req.session.type = "/trainer";
+
     ///Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
-    req.session.type = "/trainer";
     res.render('accounts/trainer/login', 
     { 
         csrfToken: req.csrfToken(), 
@@ -56,7 +58,9 @@ router.post('/login', passport.authenticate('local.trainer.login', {
 router.get('/signup', (req, res) => {
     let messages = req.flash('error');
     
+    ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
     req.session.type = "/trainer";
+
     ///Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
     res.render('accounts/trainer/signup', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 });
@@ -77,11 +81,14 @@ router.post('/signup', passport.authenticate('local.trainer.signup', {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
 
+    ///Trainer have one to one relationship with Gym
+    ///Populate the referenced Gym and only show the name, description and location
     var query = Trainer.findById({ _id: req.user._id })
                 .populate('local.gymInfo', 
                 ['name', 'description', 'location'])
                 .select({'__v': 0});
 
+    ///Execute the query
     query.exec((err, trainer) => {
         if(err){
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
@@ -101,9 +108,11 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
 // This trainer profile can be seen by client whether they are logged or not
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/profile/:id', (req, res) => {
+    ///Find the profile of the trainer, using the ID as parameter
     var query = Trainer.findById({ _id: req.params.id })
                 .select({'__v': 0});
 
+    ///Execute query
     query.exec((err, trainer) => {
         if(err){
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
@@ -125,7 +134,7 @@ router.get('/profile/:id', (req, res) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/auth/facebook', passport.authenticate('facebook.trainer', { scope : 'email' }));
 
- ///handle the callback after facebook has authenticated the user
+    ///handle the callback after facebook has authenticated the user
     router.get('/auth/facebook/callback',
         passport.authenticate('facebook.trainer', {
             successRedirect : '/trainer/profile',

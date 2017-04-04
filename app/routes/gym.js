@@ -29,7 +29,8 @@ const isTrainer = (req, res, next) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/', (req, res) => {
 	var query = Gym.find({})
-				//Gym is has a one to one relationship with trainer so it can be populated
+				///Gym is has a one to one relationship with trainer so it can be populated
+				///Populate the referenced trainer and only show the name, specialization, address and email
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
@@ -54,7 +55,8 @@ router.get('/', (req, res) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/search/:id', (req, res) => {
 	var query = Gym.findById({ _id: req.params.id })
-				//Gym is has a one to one relationship with trainer so it can be populated
+				///Gym have one to one relationship with trainer's model
+				///Populate the referenced trainer and only show the name, specialization, address and email
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
@@ -101,8 +103,11 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 	newGym.image = req.body.image;
 	newGym.trainers = req.user;
 
+	///Process the new Gym for saving
 	newGym.save((err, gym) => {
+		///Check for errors, If there's no errors execute the next function which will update the trainer's gym info
 		if(err){
+			//return res.json({ success: false, error: err, message: 'Something went wrong.', session: req.user, csrfToken: req.csrfToken() })
 			return res.render('gym/create', 
 			{ 
 				success: false, 
@@ -127,15 +132,17 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 	///create a session for the new created gym so that the trainer that will be updated can access the object id of the gym
 	req.session.gym = newGym;
 
+	///Get the logged in user id
 	let query = Trainer.findOne({ _id: req.user._id });
 
+	///Execute query
 	query.exec((err, trainer) => {
 		if (err) {	
 			return res.status(500).send({success: false, error: err });
 		}
 		///Update the existing trainer and it's gymInfo
 	    trainer.local.gymInfo = req.session.gym._id;
-	    ///Save the trainer and check for errors 
+	    ///Process the info needed for updating the trainer's gymInfo
 	    trainer.save(err => {
 	      	if (err) {
 				return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
