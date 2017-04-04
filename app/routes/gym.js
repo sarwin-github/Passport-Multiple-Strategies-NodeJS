@@ -16,43 +16,51 @@ router.use(csrfProtection);
 // A middleware that will check if the user trying to log in is indeed a trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const isTrainer = (req, res, next) => {
-    if(req.user.local.isTrainer === true || req.user.facebook.email){
+    if(req.user.local.isTrainer === true || req.user.facebook.email && req.user.local.name != null){
         return next();
     }
+    ///Flash this message if a trainer create a gym while using facebook oauth
+    req.flash('message', 'Sorry, creating a gym is not yet supported for trainer authenticated by facebook');
     res.redirect('/trainer/login');
 }
 
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// This will render the list of Gym and it's corresponding trainer
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/', (req, res) => {
 	var query = Gym.find({})
+				//Gym is has a one to one relationship with trainer so it can be populated
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
 					'id'])
 				.select({'__v': 0});
-
+	///Execute query
 	query.exec((err, gym) => {
 		if(err){
 			return response.status(500).send({success: false, error: err, message: 'Something went wrong.'});
 		}
-
 		if(!gym){
 			return response.status(200).send({success: false, message: "Record for that gym is empty"});
 		}
-
 		//res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
-		res.render('gym/index', { gym: gym });
+		res.render('gym/index', { gym: gym, user_type: req.session.type });
 	}) 
 });
 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// This will render the Gym profile, view has not been created yet
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/search/:id', (req, res) => {
 	var query = Gym.findById({ _id: req.params.id })
+				//Gym is has a one to one relationship with trainer so it can be populated
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
 					'id'])
 				.select({'__v': 0});
-
+	///Execute query			
 	query.exec((err, gym) => {
 		if(err){
 			return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
@@ -65,14 +73,26 @@ router.get('/search/:id', (req, res) => {
 	});
 });
 
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// This will render the Create Gym Form, One gym per trainer
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/create', isLoggedIn, isTrainer, (req, res) => {
 	//res.json({success: true, csrfToken: req.csrfToken(), message: '', session: req.user});
-	res.render('gym/create',{ csrfToken: req.csrfToken(), message: '', session: req.user });
+	res.render('gym/create',
+	{ 
+		csrfToken: req.csrfToken(), 
+		user_type: req.session.type, 
+		message: '', 
+		session: req.user 
+	});
 });
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// After everything is validated the http post will execute
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 
+	///This will create the new Gym
 	let newGym = new Gym();
 
 	newGym.name = req.body.name;
@@ -83,36 +103,46 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 
 	newGym.save((err, gym) => {
 		if(err){
-			return res.render('gym/create',{success: false, error: err, message: 'Something went wrong.', session: req.user, csrfToken: req.csrfToken()});
+			return res.render('gym/create', 
+			{ 
+				success: false, 
+			  	error: err, 
+			  	message: 'Something went wrong.', 
+			  	session: req.user, 
+			  	csrfToken: req.csrfToken()
+			});
 		}
 		if(!gym){
-			return res.status(200).send({success: false, error: err, message: 'Something went wrong.'});
+			return res.status(200).send(
+			{
+				success: false, 
+				error: err, 
+				message: 'Something went wrong.'
+			});
 		}
 
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// This will update the trainer's gym information as gym information will be empty for newly created trainers
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	req.session.gym = newGym;
 
 	let query = Trainer.findOne({ _id: req.user._id });
 
 	query.exec((err, trainer) => {
-
 		if (err) {	
 			return res.status(500).send({success: false, error: err });
 		}
-
-		 // Update the existing trainer and it's gymInformation
+		///Update the existing trainer and it's gymInfo
 	    trainer.local.gymInfo = req.session.gym._id;
-
-	    // Save the trainer and check for errors 
+	    ///Save the trainer and check for errors 
 	    trainer.save(err => {
 	      	if (err) {
 				return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
 			}
-		res.redirect('/gym');
-	    });
-	});
-
-	//res.json({success: true, gym: gym, message: "Successfully added new gym"});
-
+			//res.json({success: true, gym: gym, message: "Successfully added new gym"});
+			res.redirect('/gym');
+	    	});
+		});
 	});
 });
 

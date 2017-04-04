@@ -27,18 +27,26 @@ const isClient = (req, res, next) => {
 router.get('/login', (req, res) => {
     let messages = req.flash('error');
     
-    //Token will be validated every login get request, 
+    req.session.type = "/client";
+    ///Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
-    res.render('accounts/client/login', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
+    res.render('accounts/client/login', 
+    { 
+        csrfToken: req.csrfToken(), 
+        user_type: req.session.type, 
+        message: messages, 
+        hasErrors: messages.length > 0  
+    });
 });
 
 router.post('/login', passport.authenticate('local.client.login', {
-    //If passport is successful in authenticating login, redirect to client profile
+    ///If passport is successful in authenticating login, redirect to client profile
     successRedirect: '/client/profile',
-    //If passport failed in authenticating login redirect to login page again
+    ///If passport failed in authenticating login redirect to login page again
     failureRedirect: '/client/login',
     failureFlash: true
 }));
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the Sign up Page, to pass the data to react use the res.json/ response.json
@@ -46,15 +54,22 @@ router.post('/login', passport.authenticate('local.client.login', {
 router.get('/signup', (req, res) => {
     let messages = req.flash('error');
     
-    //Token will be validated every Sign up get request,
+    req.session.type = "/client";
+    ///Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
-    res.render('accounts/client/signup', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 });
+    res.render('accounts/client/signup', 
+    { 
+        csrfToken: req.csrfToken(), 
+        user_type: req.session.type, 
+        message: messages, hasErrors: 
+        messages.length > 0 
+    });
 });
 
 router.post('/signup', passport.authenticate('local.client.signup', {
-    //If passport is successful in authenticating signup, redirect to client profile
+    ///If passport is successful in authenticating signup, redirect to client profile
     successRedirect: '/client/profile',
-    //If passport failed in authenticating signup, redirect to sign up page again
+    ///If passport failed in authenticating signup, redirect to sign up page again
     failureRedirect: '/client/signup',
     failureFlash: true
 }));
@@ -68,7 +83,7 @@ router.post('/signup', passport.authenticate('local.client.signup', {
 router.get('/profile', isLoggedIn, isClient, (req, res) => {
     //res.json({user: req.user})
     res.render('accounts/client/profile.ejs', {
-        user : req.user 
+        user : req.user, user_type: req.session.type, 
     });
 });
 
@@ -76,9 +91,9 @@ router.get('/profile', isLoggedIn, isClient, (req, res) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Facebook Authentication
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-router.get('/auth/facebook', passport.authenticate('facebook.client', { scope : 'email' }));
+router.get('/auth/facebook', passport.authenticate('facebook.client', { scope : 'email', }));
 
- // handle the callback after facebook has authenticated the user
+ ///handle the callback after facebook has authenticated the user
     router.get('/auth/facebook/callback',
         passport.authenticate('facebook.client', {
             successRedirect : '/client/profile',
@@ -93,6 +108,7 @@ router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
 });
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Route middleware to make sure a user is logged in

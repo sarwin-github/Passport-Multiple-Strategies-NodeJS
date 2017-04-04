@@ -15,11 +15,16 @@
         <div class="col-sm-6 col-sm-offset-3">
 
             <h1>Login as Trainer</h1>
-
+            <br>
             <!-- show any messages that come back with authentication -->
             <% if (message.length > 0) { %>
                 <div class="alert alert-danger"><%= message %></div>
                 <% } %>
+                <br>
+                <!-- show any messages that come back with authentication -->
+                <% if (facebookWarning.length > 0) { %>
+                    <div class="alert alert-danger"><%= facebookWarning %></div>
+                    <% } %>
 
                 <!-- LOGIN FORM -->
                 <form action="/trainer/login" method="post">
@@ -38,7 +43,7 @@
                 <hr>
 
                 <p>Need an account? <a href="/trainer/signup">Signup</a></p>
-                <p><a href="/trainer/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook">   | </span> Login with Facebook</a> Or go <a href="/">home</a>.</p>
+                <p><a href="/trainer/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook">   | </span> Login with Facebook</a> Or go <a href="/gym/">home</a>.</p>
 
             </div>
 

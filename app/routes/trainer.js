@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const csrf = require('csurf');
 const Trainer = require('../../app/model/trainer');
+
 /* Create a middleware for CSRF token creation and validation. This middleware adds a req.csrfToken() 
 function to make a token which should be added to requests which mutate state, within a hidden form field, 
 query-string etc. This token is validated against the visitor's session or csrf cookie.*/
@@ -26,16 +27,24 @@ const isTrainer = (req, res, next) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/login', (req, res) => {
     let messages = req.flash('error');
+    let facebookWarning = req.flash('message');
     
-    //Token will be validated every login get request, 
+    ///Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
-    res.render('accounts/trainer/login', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
+    req.session.type = "/trainer";
+    res.render('accounts/trainer/login', 
+    { 
+        csrfToken: req.csrfToken(), 
+        message: messages, 
+        facebookWarning: facebookWarning, 
+        hasErrors: messages.length > 0  
+    });
 });
 
 router.post('/login', passport.authenticate('local.trainer.login', {
-    //If passport is successful in authenticating login, redirect to trainer profile
+    ///If passport is successful in authenticating login, redirect to trainer profile
     successRedirect: '/trainer/profile',
-    //If passport failed in authenticating login redirect to login page again
+    ///If passport failed in authenticating login redirect to login page again
     failureRedirect: '/trainer/login',
     failureFlash: true
 }));
@@ -47,15 +56,16 @@ router.post('/login', passport.authenticate('local.trainer.login', {
 router.get('/signup', (req, res) => {
     let messages = req.flash('error');
     
-    //Token will be validated every Sign up get request,
+    req.session.type = "/trainer";
+    ///Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
     res.render('accounts/trainer/signup', { csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 });
 });
 
 router.post('/signup', passport.authenticate('local.trainer.signup', {
-    //If passport is successful in authenticating signup, redirect to trainer profile
+    ///If passport is successful in authenticating signup, redirect to trainer profile
     successRedirect: '/trainer/profile',
-    //If passport failed in authenticating signup, redirect to sign up page again
+    ///If passport failed in authenticating signup, redirect to sign up page again
     failureRedirect: '/trainer/signup',
     failureFlash: true
 }));
@@ -79,10 +89,9 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
         if(!trainer){
             return res.status(200).send({success: false, message: "Record for that trainer does not exist"});
         }
-
         //res.json({trainer: trainer})
         res.render('accounts/trainer/profile.ejs', {
-            trainer: trainer
+            trainer: trainer, user_type: req.session.type
         });
     });   
 });
@@ -104,7 +113,7 @@ router.get('/profile/:id', (req, res) => {
         }
 
         //res.json({user: req.user, trainer: trainer})
-        res.render('accounts/trainer/profile-client-view.ejs', { trainer: trainer});
+        res.render('accounts/trainer/profile-client-view.ejs', { trainer: trainer, user_type: req.session.type});
     });
 
   
@@ -116,7 +125,7 @@ router.get('/profile/:id', (req, res) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/auth/facebook', passport.authenticate('facebook.trainer', { scope : 'email' }));
 
- // handle the callback after facebook has authenticated the user
+ ///handle the callback after facebook has authenticated the user
     router.get('/auth/facebook/callback',
         passport.authenticate('facebook.trainer', {
             successRedirect : '/trainer/profile',

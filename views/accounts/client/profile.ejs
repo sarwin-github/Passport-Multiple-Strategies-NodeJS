@@ -2,67 +2,63 @@
 <html>
 <head>
   <title>Fitness Market App</title>
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/font-awesome.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
   <style>
     body { word-wrap:break-word; }
   </style>
 </head>
 <body>
-  <div class="container">
-
-    <div class="page-header text-center">
-      <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-      <a href="/trainer/logout" class="btn btn-default btn-sm">Logout</a>
-    </div>
-
-    <div class="row">
-
-      <!-- LOCAL INFORMATION -->
-      <div class="col-sm-6">
-        <div class="well">
-          <h3><span class="fa fa-user"></span> Client Profile</h3>
-          <p>
-            <strong>id</strong>: <%= user._id %><br>
-            <strong>email</strong>: <%= user.local.email %><br>
-            <strong>name</strong>: <%= user.local.name %><br>
-            <strong>Age</strong>: <%= user.local.age %><br>
-            <strong>Birthday</strong>: 
-            <% if(user.local.birthday){%>
-              <%= user.local.birthday.toLocaleDateString("en-US") %>
-              <%}%>
-              <br>
-              <strong>Address</strong>: 
-              <!-- For each loops that itterate and display each specialization of the trainer-->
-              <% user.local.address.forEach(function(addresses){ %>
-                <ul>
-                  <%= addresses %>
-                </ul>
-                <%});%>
-              </p>
+  <div class="container-fluid" style="padding:0px;">
+  <%- include("../../templates/navbar.ejs") %>
+    <div class="container">
+      <div class="row">
+        <!-- LOCAL INFORMATION -->
+        <div class="col-sm-12">
+          <div class="well">
+            <h3><span class="fa fa-user"></span> Client Profile</h3>
+            <p>
+              <strong>id</strong>: <%= user._id %><br>
+              <strong>email</strong>: <%= user.local.email %><br>
+              <strong>name</strong>: <%= user.local.name %><br>
+              <strong>Age</strong>: <%= user.local.age %><br>
+              <strong>Birthday</strong>: 
+              <% if(user.local.birthday){%>
+                <%= user.local.birthday.toLocaleDateString("en-US") %>
+                <%}%>
+                <br>
+                <strong>Address</strong>: 
+                <!-- For each loops that itterate and display each specialization of the trainer-->
+                <% user.local.address.forEach(function(addresses){ %>
+                  <ul>
+                    <%= addresses %>
+                  </ul>
+                  <%});%>
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div class="row">
-
-           <!-- FACEBOOK INFORMATION -->
-           <div class="col-sm-6">
-             <div class="well">
-               <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-               <p>
-                 <strong>id</strong>: <%= user.facebook.id %><br>
-                 <strong>token</strong>: <%= user.facebook.token %><br>
-                 <strong>email</strong>: <%= user.facebook.email %><br>
-                 <strong>name</strong>: <%= user.facebook.name %>
-               </p>
-
+             <!-- FACEBOOK INFORMATION -->
+             <div class="col-sm-12">
+               <div class="well">
+                 <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+                 <p>
+                   <strong>id</strong>: <%= user.facebook.id %><br>
+                   <strong>token</strong>: <%= user.facebook.token %><br>
+                   <strong>email</strong>: <%= user.facebook.email %><br>
+                   <strong>name</strong>: <%= user.facebook.name %>
+                 </p>
+               </div>
              </div>
-           </div>
-
          </div>
-
        </div>
-
 
      </div>
    </body>

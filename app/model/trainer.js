@@ -17,6 +17,7 @@ const trainerSchema = mongoose.Schema({
         birthday        : Date,
         address         : [String],
         specialization	: [String],
+        image           : String,
         gymInfo		    : { type: Schema.Types.ObjectId, ref: 'Gym'}
 	},
 	//Data for oauth using facebook

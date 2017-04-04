@@ -2,30 +2,36 @@
 <html>
 <head>
     <title>Fitness Market App</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/css/bootstrap.css">
+      <link rel="stylesheet" href="/css/font-awesome.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="/js/jquery.js"></script>
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/bootstrap.js"></script>
     <style>
-        body { padding-top:10px; }
+        .break{ display:block; word-wrap:break-word; }
+        .text-break-tooLong {
+            word-wrap: break-word;         /* All browsers since IE 5.5+ */
+            overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container-fluid" style="padding:0px;">
+ <%- include("../templates/navbar.ejs") %>
     <div class="container">
-    <div class="row">
-    <%- include("../templates/navbar.ejs") %>
-    <% if(gym == null){%>
-        <h2> Gym is currently empty!</h2>
-    <% } %>
-
-    <% if(gym){%>
-    <h2>List of Gym</h2>
-    <% } %>
-    <!-- Get the list of gym -->
-    <% gym.forEach(function(gymInfo){%>
-        <div class="col-md-4">  
-            <%= gymInfo.name %> 
-            <%= gymInfo.description %>
-            <!-- Get the list of trainer available for this Gym -->
+        <h2>List of Available Gym</h2>
+        <hr>
+        <!-- Get the list of gym -->
+        <% gym.forEach(function(gymInfo){%>
+            <div class="col-md-4">  
+                <h3><%= gymInfo.name %></h3><hr>
+                <p class="text-break-tooLong">Description: <%= gymInfo.description %><p>
+                <!-- Get the list of trainer available for this Gym -->
                 <dl>
                     <dd>Trainer: <%= gymInfo.trainers.local.name %></dd>
                     <dd>Specialize in: 
@@ -33,17 +39,22 @@
                        <span class="label label-warning">#<%= specializeIn %></span>
                     <%});%>  
                     </dd><br>
-                    <dd><img src="<%= gymInfo.image%>" class="img-responsive" width="300"></img></dd>
+                    <dd><img src="<%= gymInfo.image%>" class="img-responsive" width="340"></img></dd>
                     <hr>
-                    <dd><a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-danger btn-sm">View Trainers Profile</a></dd>
-                </dl> 
+                    <dd class="text-center">
+                    <a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-success btn-sm">
+                        View Trainers Profile
+                    </a>
 
-               
-        </div>
-    <%});%>
+                    <a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-success btn-sm">
+                        Book a Class
+                    </a>
+                    </dd>
+                </dl>     
+                <hr>
+            </div>
+        <%});%>
     </div>
-    </div>
-
 </div>
 </body>
 </html>
