@@ -23,17 +23,21 @@
         <div class="well">
           <h3><span class="fa fa-user"></span> Trainer Profile</h3>
           <p>
-            <strong>id</strong>: <%= user._id %><br>
-            <strong>email</strong>: <%= user.local.email %><br>
-            <strong>name</strong>: <%= user.local.name %><br>
-            <strong>description</strong>: <%= user.local.description %><br>
+            <strong>id</strong>: <%= trainer._id %><br>
+            <strong>email</strong>: <%= trainer.local.email %><br>
+            <strong>name</strong>: <%= trainer.local.name %><br>
+            <strong>description</strong>: <%= trainer.local.description %><br>
             <strong>specialization</strong>: 
             <!-- For each loops that itterate and display each specialization of the trainer-->
-            <% user.local.specialization.forEach(function(specializeIn){ %>
-              <ul>
-                <%= specializeIn%>
-              </ul>
+              <% trainer.local.specialization.forEach(function(specializeIn){ %>
+                <ul>
+                  <%= specializeIn %>
+                </ul>
               <%});%>
+            <%if(trainer.local.gymInfo){%>
+            <strong>Gym Registered to: </strong> <%= trainer.local.gymInfo.name %> <br>
+            <a href="/gym/profile/<%= trainer.local.gymInfo.id %>" class="btn btn-primary btn-sm">View Gym Profile</a>
+            <%}%>
             </p>
           </div>
         </div>
@@ -45,10 +49,10 @@
            <div class="well">
              <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
              <p>
-               <strong>id</strong>: <%= user.facebook.id %><br>
-               <strong>token</strong>: <%= user.facebook.token %><br>
-               <strong>email</strong>: <%= user.facebook.email %><br>
-               <strong>name</strong>: <%= user.facebook.name %>
+               <strong>id</strong>: <%= trainer.facebook.id %><br>
+               <strong>token</strong>: <%= trainer.facebook.token %><br>
+               <strong>email</strong>: <%= trainer.facebook.email %><br>
+               <strong>name</strong>: <%= trainer.facebook.name %>
              </p>
 
            </div>

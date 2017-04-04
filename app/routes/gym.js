@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express();
 const Gym = require('../model/gym');
+const Trainer = require('../model/trainer');
 const csrf = require('csurf');
 
 /* Create a middleware for CSRF token creation and validation. This middleware adds a req.csrfToken() 
@@ -71,7 +72,8 @@ router.get('/create', isLoggedIn, isTrainer, (req, res) => {
 });
 
 router.post('/create', isLoggedIn, isTrainer, (req, res) => {
-	var newGym = new Gym();
+
+	let newGym = new Gym();
 
 	newGym.name = req.body.name;
 	newGym.description = req.body.description;
@@ -87,8 +89,30 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 			return res.status(200).send({success: false, error: err, message: 'Something went wrong.'});
 		}
 
+	req.session.gym = newGym;
+
+	let query = Trainer.findOne({ _id: req.user._id });
+
+	query.exec((err, trainer) => {
+
+		if (err) {	
+			return res.status(500).send({success: false, error: err });
+		}
+
+		 // Update the existing trainer and it's gymInformation
+	    trainer.local.gymInfo = req.session.gym._id;
+
+	    // Save the trainer and check for errors 
+	    trainer.save(err => {
+	      	if (err) {
+				return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+			}
+		res.redirect('/gym');
+	    });
+	});
+
 	//res.json({success: true, gym: gym, message: "Successfully added new gym"});
-	res.redirect('/gym');
+
 	});
 });
 

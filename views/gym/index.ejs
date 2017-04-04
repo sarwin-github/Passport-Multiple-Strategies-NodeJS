@@ -9,9 +9,10 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
+    <div class="container">
     <div class="row">
-
+    <%- include("../templates/navbar.ejs") %>
     <% if(gym == null){%>
         <h2> Gym is currently empty!</h2>
     <% } %>
@@ -27,16 +28,21 @@
             <!-- Get the list of trainer available for this Gym -->
                 <dl>
                     <dd>Trainer: <%= gymInfo.trainers.local.name %></dd>
-                    <dd>Email:<%= gymInfo.trainers.local.email %></dd>
-                    <dd>Specialize in: <%= gymInfo.trainers.local.specialization %></dd>
+                    <dd>Specialize in: 
+                    <% gymInfo.trainers.local.specialization.forEach(function(specializeIn){ %>
+                       <span class="label label-warning">#<%= specializeIn %></span>
+                    <%});%>  
+                    </dd><br>
                     <dd><img src="<%= gymInfo.image%>" class="img-responsive" width="300"></img></dd>
                     <hr>
                     <dd><a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-danger btn-sm">View Trainers Profile</a></dd>
                 </dl> 
+
+               
         </div>
     <%});%>
     </div>
-
+    </div>
 
 </div>
 </body>
