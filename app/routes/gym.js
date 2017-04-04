@@ -31,7 +31,9 @@ const isTrainer = (req, res, next) => {
 // This will render the list of Gym and it's corresponding trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/', (req, res) => {
-	var query = Gym.find({})
+	let message = req.flash('message');
+
+	let query = Gym.find({})
 				///Gym is has a one to one relationship with trainer so it can be populated
 				///Populate the referenced trainer and only show the name, specialization, address and email
 				.populate('trainers', ['local.name', 
@@ -48,7 +50,7 @@ router.get('/', (req, res) => {
 			return response.status(200).send({success: false, message: "Record for that gym is empty"});
 		}
 		//res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
-		res.render('gym/index', { gym: gym, user_type: req.session.type });
+		res.render('gym/index', { gym: gym, user_type: req.session.type, message: message });
 	}) 
 });
 
@@ -73,7 +75,6 @@ router.get('/search/:id', (req, res) => {
 		if(!gym){
 			return res.status(200).send({success: false, message: "Record for that gym does not exist"});
 		}
-
 		res.json({success: true, gym: gym, message: "Successfully fetched the gym"});
 	});
 });
@@ -151,6 +152,7 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 				return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
 			}
 			//res.json({success: true, gym: gym, message: "Successfully added new gym"});
+			req.flash('message', 'Successfully added a new Gym');
 			res.redirect('/gym');
 	    	});
 		});
