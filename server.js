@@ -1,5 +1,5 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Add required modules
+//Add the required modules
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const express = require('express');
 const session = require('express-session');
@@ -23,23 +23,25 @@ const mongoConnectionLocal = 'mongodb://localhost:27017/fitness-marketapp-DB';
 const mongoConnectionOnline = 'mongodb://fitness-marketapp-user:34dffYMoEjR9Wt1RK5H6DCOA9FCz40KU@ds119588.mlab.com:19588/fitness-marketapp-db';
 
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoConnectionLocal, (err, database) => { if(err) { console.log(err); }});
+mongoose.connect(mongoConnectionOnline, (err, database) => { if(err) { console.log(err); }});
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Set port, view engine and session
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 app.set('port', process.env.PORT || 3001);
 
-app.use(morgan('dev'));
+app.use(morgan('dev')); ///morgar is use for development to test what are the request and response that's being handle
 app.use(cookieParser());
-app.use(validator());
-app.use(flash());
+app.use(validator()); ///validator is a backend validator by express 
+app.use(flash()); ///flash can be use to store messages or notification on session
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs'); ///Set the view engine to EJS
+app.set('views', __dirname + '/views'); ///Set the views directory
 app.use(express.static(__dirname));
+
+///Get the bootstrap, jquery, and font-awesome inside the node_module 
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
@@ -47,7 +49,7 @@ app.use('/fonts/', express.static(__dirname + '/node_modules/bootstrap/dist/font
 app.use('/fonts/', express.static(__dirname + '/node_modules/font-awesome/fonts'));
 app.use('/css/', express.static(__dirname + '/node_modules/font-awesome/css'));
 
-//Set session and cookie max life, store session in mongo database
+///Set session and cookie max life, store session in mongo database
 app.use(session({
 		secret: "53BBCA1D5814C7342D9725AF82178",    
 		resave: true,

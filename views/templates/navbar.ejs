@@ -29,11 +29,12 @@
               </span>
             </a>
             <ul class="dropdown-menu" role="menu">
-             <li><a href="<%= user_type%>/profile">Profile</a></li>
+             
                <% if(!locals.login){%>
                  <li><a href="/">Login</a></li>
                  <%}%>
                  <% if(locals.login){%>
+                  <li><a href="<%= user_type%>/profile">Profile</a></li>
                   <li><a href="<%= user_type%>/logout/">Logout</a></li>
                   <%}%>
                 </ul>

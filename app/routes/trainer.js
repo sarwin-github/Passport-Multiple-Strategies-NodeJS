@@ -110,6 +110,8 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
 router.get('/profile/:id', (req, res) => {
     ///Find the profile of the trainer, using the ID as parameter
     var query = Trainer.findById({ _id: req.params.id })
+                .populate('local.gymInfo', 
+                ['name', 'description','location', 'image'])
                 .select({'__v': 0});
 
     ///Execute query

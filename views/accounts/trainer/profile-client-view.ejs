@@ -20,10 +20,10 @@
    <%- include("../../templates/navbar.ejs") %>
     <div class="container">
       <div class="row">
-        <!-- LOCAL INFORMATION -->
+        <!-- TRAINER INFORMATION -->
         <div class="col-sm-12">
           <div class="well">
-            <h3><span class="fa fa-user"></span> Trainer Profile</h3>
+            <h3><span class="fa fa-user"></span> Trainer's Profile</h3>
             <p>
               <strong>email</strong>: <%= trainer.local.email %><br>
               <strong>name</strong>: <%= trainer.local.name %><br>
@@ -36,7 +36,15 @@
             </p>
           </div>
         </div>
+        </div>
 
+        <div class="well">
+        <Legend><span class="fa fa-users"></span> Gym Profile <a class="btn btn-danger btn-sm pull-right"> Book to this Gym </a></Legend>
+           <p><h4><strong>Gym's Name</strong>: <%= trainer.local.gymInfo.name %></h4>
+               <strong>Description</strong>: <%= trainer.local.gymInfo.description %><br>
+               </p>
+          <img src="<%= trainer.local.gymInfo.image %>" class="img-responsive" width="100%"></img>
+        </div>
         <hr>
 
       </div>

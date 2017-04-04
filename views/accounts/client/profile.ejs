@@ -21,9 +21,10 @@
     <div class="container">
       <div class="row">
         <!-- LOCAL INFORMATION -->
+        <% if(user.local.email != null){%>
         <div class="col-sm-12">
           <div class="well">
-            <h3><span class="fa fa-user"></span> Client Profile</h3>
+            <h3><span class="fa fa-user"></span> Client's Profile</h3>
             <p>
               <strong>id</strong>: <%= user._id %><br>
               <strong>email</strong>: <%= user.local.email %><br>
@@ -44,8 +45,10 @@
                 </p>
               </div>
             </div>
+            <%}%>
 
              <!-- FACEBOOK INFORMATION -->
+            <% if(user.facebook.email != null){%>
              <div class="col-sm-12">
                <div class="well">
                  <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
@@ -57,6 +60,11 @@
                  </p>
                </div>
              </div>
+             <%}%>
+
+             <Legend>Book a lesson to this Gym: </Legend>
+             <h3>Not yet booked to any Gym</h3><br>
+             <a href="/gym" class="btn btn-danger btn-sm">View All Gym</a>
          </div>
        </div>
 
