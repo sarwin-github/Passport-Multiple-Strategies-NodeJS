@@ -23,7 +23,7 @@ const mongoConnectionLocal = 'mongodb://localhost:27017/fitness-marketapp-DB';
 const mongoConnectionOnline = 'mongodb://fitness-marketapp-user:34dffYMoEjR9Wt1RK5H6DCOA9FCz40KU@ds119588.mlab.com:19588/fitness-marketapp-db';
 
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoConnectionOnline, (err, database) => { if(err) { console.log(err); }});
+mongoose.connect(mongoConnectionLocal, (err, database) => { if(err) { console.log(err); }});
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Set port, view engine and session
