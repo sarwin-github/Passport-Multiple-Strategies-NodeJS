@@ -27,7 +27,7 @@
         <!-- Get the list of gym -->
         <% gym.forEach(function(gymInfo){%>
             <div class="col-md-4">  
-                <div class="thumbnail" style="padding: 10px;"> 
+                <div class="thumbnail" style="padding: 10px; min-height: 730px;"> 
                 <h3><%= gymInfo.name %></h3><hr>
                 <p style="text-align: justify"><strong>Description</strong>: <%= gymInfo.description %><p>
                 <!-- Get the list of trainer available for this Gym -->
@@ -40,7 +40,7 @@
                        <span class="label label-warning">#<%= specializeIn %></span>
                     <%});%>  
                     </dd><br>
-                    <dd><img src="<%= gymInfo.image%>" class="img-responsive thumbnail" width="340"></img></dd>
+                    <dd><img src="<%= gymInfo.image%>" class="img-responsive thumbnail"></img></dd>
                     <hr>
                     <dd class="text-center">
                     <a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-success btn-sm">
