@@ -23,7 +23,7 @@ const mongoConnectionLocal = 'mongodb://localhost:27017/fitness-marketapp-DB';
 const mongoConnectionOnline = 'mongodb://fitness-marketapp-user:34dffYMoEjR9Wt1RK5H6DCOA9FCz40KU@ds119588.mlab.com:19588/fitness-marketapp-db';
 
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoConnectionLocal, (err, database) => { if(err) { console.log(err); }});
+mongoose.connect(mongoConnectionOnline, (err, database) => { if(err) { console.log(err); }});
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Set port, view engine and session
@@ -78,7 +78,7 @@ require('./config/client-authentication/passport');
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const TrainerRestrictedRoute = require('./app/routes/trainer/trainer-restricted');
 const TrainerUnRestrictedRoute = require('./app/routes/trainer/trainer-not-restricted');
-const ClientRoute = require('./app/routes/client/client');
+const ClientRoute = require('./app/routes/client/client-restricted');
 const Gym = require('./app/routes/gym/gym');
 const IndexRoute = require('./app/routes/index');
 

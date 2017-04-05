@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
-					'id'])
+					'local.rate', 'id'])
 				.select({'__v': 0});
 	///Execute query
 	query.exec((err, gym) => {

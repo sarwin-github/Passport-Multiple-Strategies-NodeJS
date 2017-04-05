@@ -47,7 +47,7 @@
               <div class="text-left">
                 <strong>Name</strong>: <%= trainer.local.name %><br>
                 <strong>About Trainer</strong>: <%= trainer.local.description %><br>
-                <strong>Hourly Rate</strong>: $10.00 <br>
+                <strong>Hourly Rate</strong>: $ <%= parseFloat(trainer.local.rate).toFixed(2) %> <br>
                 <strong>Specialize in</strong>: 
                 <!-- For each loops that itterate and display each specialization of the trainer-->
 
@@ -57,25 +57,22 @@
                   <hr>
                   <h4>Trainer's Contact</h4>
                   <strong>Email</strong>: <%= trainer.local.email %><br>
-                  <strong>Phone</strong>: +(759)-5884-485<br>
-                  <strong>Address</strong>: <%= trainer.local.address %><br>
+                  <strong>Phone</strong>: <%= trainer.local.phone %><br>
+                  <strong>Address</strong>: <%= trainer.local.address %> <br>
                   <strong>Email</strong>: <%= trainer.local.email %><br>
                 </div>
                  <hr>
-                <div class="text-right">
-                  <a class="btn btn-default btn-sm"> Contact Trainer </a>
+                <div class="text-center">
+                  <a href="/trainer/contact/<%= trainer._id %>" class="btn btn-default btn-sm"> Contact Trainer </a>
                   <a class="btn btn-default btn-sm"> Book a Class to This Gym </a>
                 </div>
               </p>
             </div>
 
             <div class="well hidden-xs" style="padding:10px;">  
-              <button type="submit" class="btn btn-default" style="display: block; width: 100%; padding: 15px;">Write a Review</button>
+              <a href="/"><button type="submit" class="btn btn-default" style="display: block; width: 100%; padding: 15px;">Write a Review</button></a>
             </div>
           </div>
-
-
-
         </div>  
       </div>
     </div>

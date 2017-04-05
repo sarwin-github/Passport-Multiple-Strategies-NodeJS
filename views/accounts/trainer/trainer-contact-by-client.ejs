@@ -75,20 +75,20 @@
                 <strong>Name</strong>: <%= trainer.local.name %><br>
                 <strong>About Trainer</strong>: <%= trainer.local.description %><br>
                 <strong>Hourly Rate</strong>: $10.00 <br>
-                <strong>Specialize in</strong>: 
+                
                 <!-- For each loops that itterate and display each specialization of the trainer-->
-
+                <strong>Specialize in</strong>:  
                 <% trainer.local.specialization.forEach(function(specializeIn){ %>
                   <span class="label label-warning">#<%= specializeIn %></span>
                   <%});%>
                   <hr>
                   <h4>Trainer's Contact</h4>
                   <strong>Email</strong>: <%= trainer.local.email %><br>
-                  <strong>Phone</strong>: +(759)-5884-485<br>
+                  <strong>Phone</strong>: <%= trainer.local.phone %><br>
                   <strong>Address</strong>: <%= trainer.local.address %><br>
-                  <strong>Email</strong>: <%= trainer.local.email %><br>
                 </div>
                  <hr>
+
               </p>
             </div>
 

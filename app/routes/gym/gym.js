@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
-					'id'])
+					'local.rate', 'id'])
 				.select({'__v': 0});
 	///Execute query
 	query.exec((err, gym) => {
@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
 			return response.status(500).send({success: false, error: err, message: 'Something went wrong.'});
 		}
 		if(!gym){
-			return response.status(200).send({success: false, message: "Record for that gym is empty"});
+			return response.status(204).send({success: false, message: "Record for that gym is empty"});
 		}
 		//res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
 		res.render('gym/index', { gym: gym, user_type: req.session.type, message: message });
@@ -65,7 +65,7 @@ router.get('/search/:id', (req, res) => {
 				.populate('trainers', ['local.name', 
 					'local.specialization', 
 					'local.address', 'local.email',
-					'id'])
+					'local.rate','id'])
 				.select({'__v': 0});
 	///Execute query			
 	query.exec((err, gym) => {
@@ -73,7 +73,7 @@ router.get('/search/:id', (req, res) => {
 			return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
 		}
 		if(!gym){
-			return res.status(200).send({success: false, message: "Record for that gym does not exist"});
+			return res.status(204).send({success: false, message: "Record for that gym does not exist"});
 		}
 		res.json({success: true, gym: gym, message: "Successfully fetched the gym"});
 	});
@@ -122,7 +122,7 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 			});
 		}
 		if(!gym){
-			return res.status(200).send(
+			return res.status(204).send(
 			{
 				success: false, 
 				error: err, 
@@ -144,7 +144,7 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 			if (err) {	
 				return res.status(500).send({success: false, error: err });
 			}
-			
+
 			///Update the existing trainer and it's gymInfo
 		    trainer.local.gymInfo = req.session.gym._id;
 

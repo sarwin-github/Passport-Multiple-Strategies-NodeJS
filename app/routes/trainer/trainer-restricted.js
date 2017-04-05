@@ -31,7 +31,6 @@ router.get('/login', (req, res) => {
     
     ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
     req.session.type = "/trainer";
-    req.logout(); ///Logout any user before trying to login again
 
     ///Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
@@ -96,7 +95,7 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
         }
         if(!trainer){
-            return res.status(200).send({success: false, message: "Record for that trainer does not exist"});
+            return res.status(204).send({success: false, message: "Record for that trainer does not exist"});
         }
         //res.json({trainer: trainer})
         res.render('accounts/trainer/profile', {
@@ -109,6 +108,9 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
 // This will render the update form for user
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/update', isLoggedIn, isTrainer, (req, res) => {
+    let messages = req.flash('error');
+
+    ///Populate the referenced Gym and only show the name, description and location
     let query = Trainer.findById({ _id: req.user._id })
                 .populate('local.gymInfo', ///Populate Gym Info details
                 ['name', 'description','location', 'image']) ///Only populate the name, description, location and image
@@ -120,23 +122,48 @@ router.get('/update', isLoggedIn, isTrainer, (req, res) => {
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
         }
         if(!trainer){
-            return res.status(200).send({success: false, message: 'Record for that trainer does not exist'});
+            return res.status(204).send({success: false, message: 'Record for that trainer does not exist'});
         }
-        res.json({trainer: trainer})
+        res.json(
+        {
+            trainer: trainer, 
+            csrfToken: req.csrfToken(), 
+            message: messages, 
+            hasErrors: messages.length > 0 
+        });
     });
 });
 
 router.put('/update', (req, res) => {
-    let query = Trainer.findById({_id: req.user._id }).select({'local.name': 1});
+    let query = Trainer.findById({_id: req.user._id }).select({'local.name': 1, 'phone': 1});
 
     query.exec((err, trainer) => {
         if(err){
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
         }
         if(!trainer){
-            return res.status(200).send({success: false, message: 'Record for that trainer does not exist'});
+            return res.status(204).send({success: false, message: 'Record for that trainer does not exist'});
         }
-        res.json({trainer: trainer})
+
+        trainer.local.name = req.body.name;
+        trainer.local.phone = req.body.phone;
+        trainer.local.birthday = req.body.birthday;
+        trainer.local.age = req.body.age;
+
+        trainer.save(err => {
+            if(err){
+                return res.status(500).send({
+                    success: false, 
+                    error: err, 
+                    message: 'Something went wrong.'
+                });
+            }
+        //res.json({success: true, gym: gym, message: "Successfully added new gym"});
+        req.flash('message', 'Successfully updated your profile');
+        res.json({trainer: trainer, message: 'Successfully updated your profile'})   
+        })
+
+   
     });
 });
 

@@ -27,7 +27,7 @@ router.get('/profile/:id', (req, res) => {
         }
 
         //res.json({user: req.user, trainer: trainer})
-        res.render('accounts/trainer/profile-client-view', { trainer: trainer, user_type: req.session.type});
+        res.render('accounts/trainer/trainer-profile-client-view', { trainer: trainer, user_type: req.session.type});
     });
 });
 
