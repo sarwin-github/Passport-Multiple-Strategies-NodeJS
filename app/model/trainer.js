@@ -33,7 +33,7 @@ const trainerSchema = mongoose.Schema({
         image           : String,
         phone           : String,
         rate            : Number,
-        gymInfo		    : { type: Schema.Types.ObjectId, ref: 'Gym'}
+        gymInfo		    : { type: Schema.Types.ObjectId, ref: 'Gym', unique: true}
 	},
 	//Data for oauth using facebook
 	facebook         : {

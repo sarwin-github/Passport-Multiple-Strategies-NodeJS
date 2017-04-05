@@ -19,13 +19,14 @@ router.use(csrfProtection);
 // A middleware that will check if the user trying to log in is indeed a trainer
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const isTrainer = (req, res, next) => {
-    if(req.user.local.isTrainer === true || req.user.facebook.email && req.user.local.name != null){
+    if(req.user.local.isTrainer === true && req.user.local.gymInfo == null || req.user.facebook.email && req.user.local.name != null){
         return next();
     }
     ///Flash this message if a trainer create a gym while using facebook oauth
     req.flash('message', 'Sorry, creating a gym is not yet supported for trainer authenticated by facebook');
     res.redirect('/trainer/login');
 }
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the list of Gym and it's corresponding trainer
@@ -172,7 +173,7 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated())
         return next();
-    res.redirect('/');
+    res.redirect('/index');
 };
 
 module.exports = router;

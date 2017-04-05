@@ -18,6 +18,7 @@ const isTrainer = (req, res, next) => {
     if(req.user.local.isTrainer === true || req.user.facebook.email){
         return next();
     }
+    req.flash('message', 'Sorry, only trainer can access this route');
     res.redirect('/trainer/login');
 }
 
@@ -116,7 +117,7 @@ router.get('/update', isLoggedIn, isTrainer, (req, res) => {
                 ['name', 'description','location', 'image']) ///Only populate the name, description, location and image
                 .select({'__v': 0, 
                 'local.password': 0, 'local.isTrainer':0 }); ///Remove the password and isTrainer so user cannot access that data
-
+    ///Execute query
     query.exec((err, trainer) => {
         if(err){
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
@@ -137,6 +138,7 @@ router.get('/update', isLoggedIn, isTrainer, (req, res) => {
 router.put('/update', (req, res) => {
     let query = Trainer.findById({_id: req.user._id }).select({'local.name': 1, 'phone': 1});
 
+    ///Execute query
     query.exec((err, trainer) => {
         if(err){
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
@@ -162,8 +164,6 @@ router.put('/update', (req, res) => {
         req.flash('message', 'Successfully updated your profile');
         res.json({trainer: trainer, message: 'Successfully updated your profile'})   
         })
-
-   
     });
 });
 

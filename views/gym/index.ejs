@@ -30,10 +30,12 @@
                 <div class="thumbnail" style="padding: 10px; min-height: 730px;"> 
                 <h3><%= gymInfo.name %></h3><hr>
                 <p style="text-align: justify"><strong>Description</strong>: <%= gymInfo.description %><p>
-                <!-- Get the list of trainer available for this Gym -->
+                
                 <dl>
+                    <!-- GET THE LIST OF TRAINER AVAILABLE FOR THIS GYM -->
                     <dd><h4><strong>Trainer</strong>: <%= gymInfo.trainers.local.name %></dd></h4>
                     <dd><strong>Location</strong>: <%= gymInfo.location %></dd>
+                    <!-- SET THE DECIMAL POINT TO FIXED 2 DECIMAL POINT FOR HOURLY RATE -->
                     <dd><strong>Hourly Rate</strong>: $ <%= parseFloat(gymInfo.trainers.local.rate).toFixed(2) %></dd>
                     <dd><strong>Specialize in</strong>: 
                     <% gymInfo.trainers.local.specialization.forEach(function(specializeIn){ %>

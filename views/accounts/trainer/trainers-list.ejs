@@ -17,38 +17,33 @@
 </head>
 <body>
   <div class="container-fluid" style="padding:0px;">
+    <!-- THIS IS THE NAVIGATION BAR -->
     <%- include("../../templates/navbar.ejs") %>
     <div class="container">
-      <h2>List of Trainers</h2>
-      <hr>
-
+      <!-- GET THE LIST OF TRAINERS -->
+      <h2>List of Trainers</h2><hr>
       <% trainer.forEach(function(trainers){%>
         <% if(trainers.facebook.email == null){%>
         <!-- TRAINER INFORMATION -->
         <div class="col-sm-4 text-center">
-          <div class="thumbnail" style="padding:15px;  min-height: 500px;">
+          <div class="thumbnail" style="padding:15px;  min-height: 520px;">
+            <!-- TRAINER HEADER'S NAME -->
             <h3><span class="fa fa-user"></span> <%= trainers.local.name %></h3>
-            <p>
               <img src="<%= trainers.local.image %>" class="img-responsive img-thumbnail img-circle" width="150"></img> <br>
               
               <div class="text-left">
                 <strong>About Trainer</strong>: <p style="text-align:justify"><%= trainers.local.description %></p><br>
                 <strong>Name</strong>: <%= trainers.local.name %><br>
+                <!-- SET THE DECIMAL POINT TO FIXED 2 DECIMAL POINT FOR HOURLY RATE --> 
                 <strong>Hourly Rate</strong>: $ <%= parseFloat(trainers.local.rate).toFixed(2) %> <br>
-                
-                <!-- For each loops that itterate and display each specialization of the trainer-->
+
+                <!-- FOR EACH LOOPS THAT ITTERRATE AND DISPLAY EACH SPECIALIZATION OF THE TRAINER-->
                 <strong>Specialize in</strong>: 
                 <% trainers.local.specialization.forEach(function(specializeIn){ %>
                   <span class="label label-warning">#<%= specializeIn %></span>
                   <%});%>
                   <hr>
-                   <!-- <h4>Contact Trainer</h4>
-                  <strong>Email</strong>: <%= trainers.local.email %><br>
-                  <strong>Phone</strong>: +(759)-5884-485<br>
-                  <strong>Address</strong>: <%= trainers.local.address %><br>-->
-                </div>
-
-              </p>
+              </div>
             </div>
 
             <a href="/trainer/contact/<%= trainers._id %>"><div class="well">

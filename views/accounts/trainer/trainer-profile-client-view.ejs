@@ -47,10 +47,10 @@
               <div class="text-left">
                 <strong>Name</strong>: <%= trainer.local.name %><br>
                 <strong>About Trainer</strong>: <%= trainer.local.description %><br>
+                <!-- SET THE DECIMAL POINT TO FIXED 2 DECIMAL POINT FOR HOURLY RATE -->
                 <strong>Hourly Rate</strong>: $ <%= parseFloat(trainer.local.rate).toFixed(2) %> <br>
                 <strong>Specialize in</strong>: 
-                <!-- For each loops that itterate and display each specialization of the trainer-->
-
+                <!-- FOR EACH LOOPS THAT ITTERRATE AND DISPLAY EACH SPECIALIZATION OF THE TRAINER-->
                 <% trainer.local.specialization.forEach(function(specializeIn){ %>
                   <span class="label label-warning">#<%= specializeIn %></span>
                   <%});%>

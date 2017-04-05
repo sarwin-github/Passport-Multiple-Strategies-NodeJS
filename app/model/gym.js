@@ -3,7 +3,7 @@ const Schema   = mongoose.Schema;
 
 const gymSchema = mongoose.Schema({
 	name: { type: String, required: true },
-	trainers: { type: Schema.Types.ObjectId, ref: 'Trainer', required: true},
+	trainers: { type: Schema.Types.ObjectId, ref: 'Trainer', required: true, unique: true},
 	description: { type: String, required: true },
 	location: {type: String, required: true },
 	image: [String] //Can contain many images
