@@ -80,15 +80,14 @@ router.post('/signup', passport.authenticate('local.trainer.signup', {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This will render the Trainer Profile Page, to pass the data to react use the res.json/ response.json
 // you can access the trainer data using, trainer.local.email if you want to see the email of the trainer
-// Trainer is allowed to update their data
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
 
     ///Trainer have one to one relationship with Gym
     ///Populate the referenced Gym and only show the name, description and location
-    var query = Trainer.findById({ _id: req.user._id })
+    let query = Trainer.findById({ _id: req.user._id })
                 .populate('local.gymInfo', 
-                ['name', 'description', 'location'])
+                ['name', 'description', 'location', 'image', 'id'])
                 .select({'__v': 0});
 
     ///Execute the query
@@ -104,6 +103,41 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
             trainer: trainer, user_type: req.session.type
         });
     });   
+});
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// This will render the update form for user
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+router.get('/update', isLoggedIn, isTrainer, (req, res) => {
+    let query = Trainer.findById({ _id: req.user._id })
+                .populate('local.gymInfo', ///Populate Gym Info details
+                ['name', 'description','location', 'image']) ///Only populate the name, description, location and image
+                .select({'__v': 0, 
+                'local.password': 0, 'local.isTrainer':0 }); ///Remove the password and isTrainer so user cannot access that data
+
+    query.exec((err, trainer) => {
+        if(err){
+            return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+        }
+        if(!trainer){
+            return res.status(200).send({success: false, message: 'Record for that trainer does not exist'});
+        }
+        res.json({trainer: trainer})
+    });
+});
+
+router.put('/update', (req, res) => {
+    let query = Trainer.findById({_id: req.user._id }).select({'local.name': 1});
+
+    query.exec((err, trainer) => {
+        if(err){
+            return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+        }
+        if(!trainer){
+            return res.status(200).send({success: false, message: 'Record for that trainer does not exist'});
+        }
+        res.json({trainer: trainer})
+    });
 });
 
 

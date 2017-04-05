@@ -17,59 +17,77 @@
 </head>
 <body>
   <div class="container-fluid" style="padding:0px;">
-  <%- include("../../templates/navbar.ejs") %>
-  <div class="container">
-    <div class="row">
+    <%- include("../../templates/navbar.ejs") %>
+    <div class="container">
+      <div class="row">
 
-      <!-- TRAINER LOCAL INFORMATION -->
-      <% if(trainer.local.email != null){%>
-      <div class="col-sm-12">
-        <div class="well">
-          <h3><span class="fa fa-user"></span> Trainer's Profile</h3>
-          <p>
-            <strong>id</strong>: <%= trainer._id %><br>
-            <strong>email</strong>: <%= trainer.local.email %><br>
-            <strong>name</strong>: <%= trainer.local.name %><br>
-            <strong>description</strong>: <%= trainer.local.description %><br>
-            <strong>specialization</strong>: 
-            <!-- For each loops that itterate and display each specialization of the trainer-->
-              <% trainer.local.specialization.forEach(function(specializeIn){ %>
-                <ul>
-                  <%= specializeIn %>
-                </ul>
-              <%});%>
-            <%if(trainer.local.gymInfo){%>
-            <strong>Gym Registered to: </strong> <%= trainer.local.gymInfo.name %> <br>
-            <a href="/gym/profile/<%= trainer.local.gymInfo.id %>" class="btn btn-primary btn-sm">View Gym Profile</a>
-            <%}%>
-            </p>
-          </div>
-        </div>
-        <%}%>
+        <!-- TRAINER LOCAL INFORMATION -->
+        <% if(trainer.local.email != null){%>
+          <div class="col-sm-4">
+            <div class="well">
+              <Legend><span class="fa fa-user"></span> Trainer's Profile</Legend>
+              <p>
+                <strong>Email</strong>: <%= trainer.local.email %><br>
+                <strong>Name</strong>: <%= trainer.local.name %><br>
+                <strong>Description</strong>: <%= trainer.local.description %><br>
+                
+                <strong>Birthday</strong>: 
+                <% if(trainer.local.birthday){%>
+                    <%= trainer.local.birthday.toLocaleDateString("en-US") %>
+                <%}%><br>
 
-        <!-- FACEBOOK TRAINER INFORMATION -->
-        <% if(trainer.facebook.email != null){%>
-        <div class="col-sm-12">
-          <div class="well">
-            <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-            <p>
-              <strong>id</strong>: <%= trainer.facebook.id %><br>
-              <strong>Email</strong>: <%= trainer.facebook.email %><br>
-              <strong>Name</strong>: <%= trainer.facebook.name %><br>
-              <strong>Gender</strong>: <%= trainer.facebook.gender %><br>
-            </p>
-        </div>
-        <%}%>
+                <!-- For each loops that itterate and display each specialization of the trainer-->
+                <strong>Address</strong>: 
+                <% trainer.local.address.forEach(function(addresses){ %>
+                    <%= addresses %>,  
+                <%});%><br>
 
-        <hr>
-        <% if(trainer.local.gymInfo == null){%>
-          <h3>There's no registered gym for this trainer yet</h3>
-          <a href="/gym/create" class="btn btn-primary">Click here to Register a gym</a>
-        <%}%>
+                <!-- For each loops that itterate and display each specialization of the trainer-->
+                <strong>Specialize In</strong>: 
+                <% trainer.local.specialization.forEach(function(specializeIn){ %>
+                    <%= specializeIn %>, 
+                <%});%><br>
 
-    </div>
-  </div>
+                    </p>
+                  </div>
+                  
+                </div>
 
-  </div>
- </body>
- </html>
+                <div class="col-sm-8">
+                  <%if(trainer.local.gymInfo){%>
+                    <strong>Gym Registered to: </strong> <%= trainer.local.gymInfo.name %> <br>
+                    <strong>Description </strong> <%= trainer.local.gymInfo.description %> 
+                    <hr>
+                    <img src="<%= trainer.local.gymInfo.image %>" class="img-responsive thumbnail" width="100%"></img>
+                  <%}%>
+                </div>
+
+
+                <%}%>
+
+                <!-- FACEBOOK TRAINER INFORMATION -->
+                <% if(trainer.facebook.email != null){%>
+                  <div class="col-sm-12">
+                    <div class="well">
+                      <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
+                      <p>
+                        <strong>id</strong>: <%= trainer.facebook.id %><br>
+                        <strong>Email</strong>: <%= trainer.facebook.email %><br>
+                        <strong>Name</strong>: <%= trainer.facebook.name %><br>
+                        <strong>Gender</strong>: <%= trainer.facebook.gender %><br>
+                      </p>
+                    </div>
+                    <%}%>
+
+                    <hr>
+                    <% if(trainer.local.gymInfo == null){%>
+                      <h3>There's no registered gym for this trainer yet</h3>
+                      <a href="/gym/create" class="btn btn-primary">Click here to Register a gym</a>
+                      <%}%>
+
+                    </div>
+                  </div>
+
+                </div>
+              </body>
+              </html>

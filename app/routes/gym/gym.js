@@ -49,8 +49,8 @@ router.get('/', (req, res) => {
 		if(!gym){
 			return response.status(200).send({success: false, message: "Record for that gym is empty"});
 		}
-		res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
-		//res.render('gym/index', { gym: gym, user_type: req.session.type, message: message });
+		//res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
+		res.render('gym/index', { gym: gym, user_type: req.session.type, message: message });
 	}) 
 });
 
@@ -133,24 +133,31 @@ router.post('/create', isLoggedIn, isTrainer, (req, res) => {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// This will update the trainer's gym information as gym information will be empty for newly created trainers
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	///create a session for the new created gym so that the trainer that will be updated can access the object id of the gym
-	req.session.gym = newGym;
+		///create a session for the new created gym so that the trainer that will be updated can access the object id of the gym
+		req.session.gym = newGym;
 
-	///Get the logged in user id
-	let query = Trainer.findOne({ _id: req.user._id });
+		///Get the logged in user id and select the gymInfo of the trainer only
+		let query = Trainer.findOne({ _id: req.user._id }).select({'local.gymInfo': 1});
 
-	///Execute query
-	query.exec((err, trainer) => {
-		if (err) {	
-			return res.status(500).send({success: false, error: err });
-		}
-		///Update the existing trainer and it's gymInfo
-	    trainer.local.gymInfo = req.session.gym._id;
-	    ///Process the info needed for updating the trainer's gymInfo
-	    trainer.save(err => {
-	      	if (err) {
-				return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+		///Execute query
+		query.exec((err, trainer) => {
+			if (err) {	
+				return res.status(500).send({success: false, error: err });
 			}
+			
+			///Update the existing trainer and it's gymInfo
+		    trainer.local.gymInfo = req.session.gym._id;
+
+		    ///Process the info needed for updating the trainer's gymInfo
+		    trainer.save(err => {
+		      	if (err) {
+					return res.status(500).send(
+					{
+						success: false, 
+						error: err, 
+						message: 'Something went wrong.'
+					});
+				}
 			//res.json({success: true, gym: gym, message: "Successfully added new gym"});
 			req.flash('message', 'Successfully added a new Gym');
 			res.redirect('/gym');

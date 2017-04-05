@@ -19,23 +19,25 @@
   <div class="container-fluid" style="padding:0px;">
     <%- include("../../templates/navbar.ejs") %>
     <div class="container">
-      <div class="row">
+      <h2>List of Trainers</h2>
+      <hr>
 
       <% trainer.forEach(function(trainers){%>
         <% if(trainers.facebook.email == null){%>
         <!-- TRAINER INFORMATION -->
         <div class="col-sm-4 text-center">
-          <div class="well">
-            <h3><span class="fa fa-user"></span> Trainer's Info</h3>
+          <div class="thumbnail" style="padding:15px;">
+            <h3><span class="fa fa-user"></span> <%= trainers.local.name %></h3>
             <p>
               <img src="<%= trainers.local.image %>" class="img-responsive img-thumbnail img-circle" width="150"></img> <br>
+              
               <div class="text-left">
                 <strong>Name</strong>: <%= trainers.local.name %><br>
                 <strong>About Trainer</strong>: <%= trainers.local.description %><br>
                 <strong>Hourly Rate</strong>: $ <%= parseFloat(trainers.local.rate).toFixed(2) %> <br>
-                <strong>Specialize in</strong>: 
+                
                 <!-- For each loops that itterate and display each specialization of the trainer-->
-              
+                <strong>Specialize in</strong>: 
                 <% trainers.local.specialization.forEach(function(specializeIn){ %>
                   <span class="label label-warning">#<%= specializeIn %></span>
                   <%});%>
@@ -45,20 +47,19 @@
                   <strong>Phone</strong>: +(759)-5884-485<br>
                   <strong>Address</strong>: <%= trainers.local.address %><br>-->
                 </div>
+                
               </p>
             </div>
-      
+
             <a href="/trainer/contact/<%= trainers._id %>"><div class="well">
               Contact Trainer
             </div></a>
+
           </div>
           <%}%>
-          <% }); %>
+        <%});%>
         </div>  
-      </div>
     </div>
-
-
   </div>
 </body>
 </html>
