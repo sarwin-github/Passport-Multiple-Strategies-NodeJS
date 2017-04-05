@@ -7,7 +7,7 @@
            <span class="icon-bar"></span>
            <span class="icon-bar"></span>
          </button>
-         <a class="navbar-brand" href="#">Fitness Market App</a>
+         <a class="navbar-brand" href="/">Fitness Market App</a>
        </div>
 
        <div class="collapse navbar-collapse">
@@ -18,7 +18,7 @@
             </a>
           </li>
           <li class="hidden-xs">
-            <a href="<%= user_type%>/profile">
+            <a href="/trainer/list">
               <span class="glyphicon glyphicon-user" aria-hidden="true">
               </span> Trainers
               </a>
@@ -31,7 +31,7 @@
             <ul class="dropdown-menu" role="menu">
              
                <% if(!locals.login){%>
-                 <li><a href="/">Login</a></li>
+                 <li><a href="/index">Login</a></li>
                  <%}%>
                  <% if(locals.login){%>
                   <li><a href="<%= user_type%>/profile">Profile</a></li>
@@ -51,7 +51,7 @@
             </a>
           </li>
           <li class="hidden-md visible-xs">
-            <a href="<%= user_type%>/profile">
+            <a href="/trainer/list"">
               <span class="glyphicon glyphicon-user" aria-hidden="true">
               </span> Trainers
               </a>

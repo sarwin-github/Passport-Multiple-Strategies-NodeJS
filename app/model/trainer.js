@@ -31,6 +31,8 @@ const trainerSchema = mongoose.Schema({
         address         : [String],
         specialization	: [String],
         image           : String,
+        phone           : String,
+        rate            : Number,
         gymInfo		    : { type: Schema.Types.ObjectId, ref: 'Gym'}
 	},
 	//Data for oauth using facebook
@@ -38,7 +40,15 @@ const trainerSchema = mongoose.Schema({
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
+        work         : String,
+        timezone     : String,
+        about        : String,
+        friends      : String,
+        education    : String,
+        gender       : String,
+        profileUrl   : String
+
     //Data for oauth using gmail or google+
     },
     google           : {

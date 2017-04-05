@@ -22,7 +22,7 @@
       <div class="row">
         <!-- LOCAL INFORMATION -->
         <% if(user.local.email != null){%>
-        <div class="col-sm-12">
+        <div class="col-sm-8">
           <div class="well">
             <h3><span class="fa fa-user"></span> Client's Profile</h3>
             <p>
@@ -49,22 +49,29 @@
 
              <!-- FACEBOOK INFORMATION -->
             <% if(user.facebook.email != null){%>
-             <div class="col-sm-12">
+             <div class="col-sm-8">
                <div class="well">
                  <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
                  <p>
                    <strong>id</strong>: <%= user.facebook.id %><br>
-                   <strong>token</strong>: <%= user.facebook.token %><br>
                    <strong>email</strong>: <%= user.facebook.email %><br>
-                   <strong>name</strong>: <%= user.facebook.name %>
+                   <strong>name</strong>: <%= user.facebook.name %><br>
+                   <strong>Gender</strong>: <%= user.facebook.gender %><br>
+                   <strong>Facebook Url</strong>: 
+                   <a href="<%= user.facebook.profileUrl %>">
+                      <%= user.facebook.profileUrl %>
+                    </a><br>
                  </p>
                </div>
              </div>
              <%}%>
-
-             <Legend>Book a lesson to this Gym: </Legend>
-             <h3>Not yet booked to any Gym</h3><br>
-             <a href="/gym" class="btn btn-danger btn-sm">View All Gym</a>
+             <div class="col-sm-4">
+             <div class="well">
+               <Legend>Book a lesson</Legend>
+               <h3>This Client is not yet booked to any Gym</h3><br>
+               <a href="/gym" class="btn btn-danger btn-sm">Click Here to View All Gym</a>
+             </div>
+             </div>
          </div>
        </div>
 

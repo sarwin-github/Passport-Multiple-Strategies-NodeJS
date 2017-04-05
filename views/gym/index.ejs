@@ -31,20 +31,22 @@
             <div class="alert alert-success"><%= message %></div>
             <% } %>
             <br>
+
         <!-- Get the list of gym -->
         <% gym.forEach(function(gymInfo){%>
             <div class="col-md-4">  
+                <div class="thumbnail" style="padding: 10px;"> 
                 <h3><%= gymInfo.name %></h3><hr>
-                <p class="text-break-tooLong">Description: <%= gymInfo.description %><p>
+                <p class="text-break-tooLong"><strong>Description</strong>: <%= gymInfo.description %><p>
                 <!-- Get the list of trainer available for this Gym -->
                 <dl>
-                    <dd>Trainer: <%= gymInfo.trainers.local.name %></dd>
-                    <dd>Specialize in: 
+                    <dd><strong>Trainer</strong>: <%= gymInfo.trainers.local.name %></dd>
+                    <dd><strong>Specialize in</strong>: 
                     <% gymInfo.trainers.local.specialization.forEach(function(specializeIn){ %>
                        <span class="label label-warning">#<%= specializeIn %></span>
                     <%});%>  
                     </dd><br>
-                    <dd><img src="<%= gymInfo.image%>" class="img-responsive" width="340"></img></dd>
+                    <dd><img src="<%= gymInfo.image%>" class="img-responsive thumbnail" width="340"></img></dd>
                     <hr>
                     <dd class="text-center">
                     <a href="/trainer/profile/<%= gymInfo.trainers._id %>" class="btn btn-success btn-sm">
@@ -57,6 +59,7 @@
                     </dd>
                 </dl>     
                 <hr>
+                </div>
             </div>
         <%});%>
     </div>

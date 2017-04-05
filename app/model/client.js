@@ -30,7 +30,9 @@ const clientSchema = mongoose.Schema({
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
+        gender       : String,
+        profileUrl   : String
     //Data for oauth using gmail or google+
     },
     google           : {

@@ -32,7 +32,7 @@ router.get('/login', (req, res) => {
     
     ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
     req.session.type = "/client";
-
+    req.logout();
     ///Token will be validated every login get request, 
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0  });
     res.render('accounts/client/login', 
@@ -61,7 +61,7 @@ router.get('/signup', (req, res) => {
     
     ///Set the request session root url to /client this will be added to the navigation bar to know what type of user is logged in
     req.session.type = "/client";
-
+    req.logout();
     ///Token will be validated every Sign up get request,
     //res.json({ csrfToken: req.csrfToken(), message: messages, hasErrors: messages.length > 0 })
     res.render('accounts/client/signup', 
@@ -104,7 +104,7 @@ router.get('/auth/facebook', passport.authenticate('facebook.client', { scope : 
     router.get('/auth/facebook/callback',
         passport.authenticate('facebook.client', {
             successRedirect : '/client/profile',
-            failureRedirect : '/'
+            failureRedirect : '/index'
         }));
 
 
@@ -123,7 +123,7 @@ router.get('/logout', (req, res) => {
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated())
         return next();
-    res.redirect('/');
+    res.redirect('/index');
 };
 
 module.exports = router;

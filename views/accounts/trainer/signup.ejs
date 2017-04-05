@@ -27,40 +27,57 @@
                     <Legend>Account Details</Legend>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="text" class="form-control" name="email" required="Email is required">
                     </div>
 
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control" name="password">
+                        <input type="password" class="form-control" name="password" required>
                     </div>
 
                     <Legend>Trainer Profile</Legend>
                     <!-- Profile Details -->
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name" required>
                     </div>
 
                     <div class="form-group">
                         <label>About Trainer</label>
-                        <input type="text" class="form-control" name="description">
+                        <input type="text" class="form-control" name="description" required>
                     </div>
 
                     <div class="form-group">
                         <label>Age</label>
-                        <input type="number" class="form-control" name="age">
+                        <input type="number" class="form-control" name="age" required>
                     </div>
 
                     <div class="form-group">
                         <label>Birthday</label>
-                        <input type="date" class="form-control" name="birthday">
+                        <input type="date" class="form-control" name="birthday" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hourly Rate(<i style = 'color: gray;'>in dollars</i>)</label>
+                        <input type="number" class="form-control" name="rate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" name="phone" required>
+                    </div>
+
+            
+                    <div class="form-group">
+                        <label>Image Link for Profile Photo</label>
+                        <input type="text" class="form-control" name="image" required>
+                        <p style = 'color: gray'><i>This is only temporary field until image upload is added</i></p>
                     </div>
 
                     <Legend>Address</Legend>
                     <div class="form-group">
                         <label>Line 1</label>
-                        <input type="text" class="form-control" name="address">
+                        <input type="text" class="form-control" name="address" required>
                     </div>
                     <div class="form-group">
                         <label>Line 2</label>
@@ -71,9 +88,9 @@
                         <input type="text" class="form-control" name="address">
                     </div>
 
-                    <Legend>Specialization</Legend>
+                    <Legend>Specialize in</Legend>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="specialization">
+                        <input type="text" class="form-control" name="specialization" required>
                     </div>
 
                     <div class="form-group">

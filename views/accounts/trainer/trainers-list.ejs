@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+  <title>Fitness Market App</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/font-awesome.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+  <style>
+    body { word-wrap:break-word; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid" style="padding:0px;">
+    <%- include("../../templates/navbar.ejs") %>
+    <div class="container">
+      <div class="row">
+
+      <% trainer.forEach(function(trainers){%>
+        <% if(trainers.facebook.email == null){%>
+        <!-- TRAINER INFORMATION -->
+        <div class="col-sm-4 text-center">
+          <div class="well">
+            <h3><span class="fa fa-user"></span> Trainer's Info</h3>
+            <p>
+              <img src="<%= trainers.local.image %>" class="img-responsive img-thumbnail img-circle" width="150"></img> <br>
+              <div class="text-left">
+                <strong>Name</strong>: <%= trainers.local.name %><br>
+                <strong>About Trainer</strong>: <%= trainers.local.description %><br>
+                <strong>Hourly Rate</strong>: $ <%= parseFloat(trainers.local.rate).toFixed(2) %> <br>
+                <strong>Specialize in</strong>: 
+                <!-- For each loops that itterate and display each specialization of the trainer-->
+              
+                <% trainers.local.specialization.forEach(function(specializeIn){ %>
+                  <span class="label label-warning">#<%= specializeIn %></span>
+                  <%});%>
+                  <hr>
+                   <!-- <h4>Contact Trainer</h4>
+                  <strong>Email</strong>: <%= trainers.local.email %><br>
+                  <strong>Phone</strong>: +(759)-5884-485<br>
+                  <strong>Address</strong>: <%= trainers.local.address %><br>-->
+                </div>
+              </p>
+            </div>
+      
+            <a href="/trainer/contact/<%= trainers._id %>"><div class="well">
+              Contact Trainer
+            </div></a>
+          </div>
+          <%}%>
+          <% }); %>
+        </div>  
+      </div>
+    </div>
+
+
+  </div>
+</body>
+</html>

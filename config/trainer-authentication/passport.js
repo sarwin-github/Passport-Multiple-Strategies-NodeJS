@@ -89,6 +89,9 @@ passport.use('local.trainer.signup', new LocalStrategy({
         newTrainer.local.birthday = req.body.birthday;
         newTrainer.local.address = req.body.address;
         newTrainer.local.specialization = req.body.specialization;
+        newTrainer.local.phone = req.body.phone;
+        newTrainer.local.rate = req.body.rate;
+        newTrainer.local.image = req.body.image;
 
         newTrainer.save((err, result)  => {
            if (err) {
@@ -151,7 +154,7 @@ passport.use('facebook.trainer', new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields: ["emails", "displayName", "name"]
+        profileFields: ["id", "emails", "displayName", "name", "timezone", "friends", "about", "gender", "profileUrl"]
     },
     // facebook will send back the token and profile
     (token, refreshToken, profile, done) => {
@@ -175,7 +178,10 @@ passport.use('facebook.trainer', new FacebookStrategy({
                     newTrainer.facebook.token = token; // we will save the token that facebook provides to the user                    
                     newTrainer.facebook.name  = `${profile.name.givenName} ${profile.name.middleName} ${profile.name.familyName}`; // look at the passport user profile to see how names are returned
                     newTrainer.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    
+                    newTrainer.facebook.profileUrl = profile.profileUrl; 
+                    newTrainer.facebook.gender = profile.gender; 
+
+
                     // save our user to the database
                     newTrainer.save(err => {
                         if (err){

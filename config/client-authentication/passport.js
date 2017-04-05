@@ -114,7 +114,7 @@ passport.use('facebook.client', new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        profileFields: ["emails", "displayName", "name"]
+        profileFields: ["emails", "displayName", "name","timezone", "friends", "about", "gender", "profileUrl"]
     },
     // facebook will send back the token and profile
     (token, refreshToken, profile, done) => {
@@ -138,7 +138,9 @@ passport.use('facebook.client', new FacebookStrategy({
                     newClient.facebook.token = token; // we will save the token that facebook provides to the user                    
                     newClient.facebook.name  = `${profile.name.givenName} ${profile.name.middleName} ${profile.name.familyName}`; // look at the passport user profile to see how names are returned
                     newClient.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    
+                    newClient.facebook.profileUrl = profile.profileUrl; 
+                    newClient.facebook.gender = profile.gender; 
+
                     // save our user to the database
                     newClient.save(err => {
                         if (err){

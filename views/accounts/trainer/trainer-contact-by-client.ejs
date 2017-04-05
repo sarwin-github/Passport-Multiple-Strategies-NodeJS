@@ -21,20 +21,47 @@
     <div class="container">
       <div class="row">
 
-        <!-- GYM PROFILE -->
+        <!-- CONTACT FORM -->
         <div class="col-sm-8">
           <div class="well">
-            <Legend><span class="fa fa-users"></span> Gym's Profile</Legend>
-            <p><h4><strong>Gym's Name</strong>: <%= trainer.local.gymInfo.name %></h4>
-              <strong>Description</strong>: <%= trainer.local.gymInfo.description %><br>
-            </p>
-            <img src="<%= trainer.local.gymInfo.image %>" class="img-responsive" width="100%"></img>
-          </div>
-          <div class="well">
-            <Legend><span class="fa fa-users"></span> Trainer's and Gym's Review</Legend>
-            <p><h4><strong>Client Name</strong>: Anna Moana</h4>
-              <strong>Review</strong>: Highly recommended gym and trainer. The trainer is strict but a good one<br>
-            </p>
+            <form class="form-horizontal" method="get" action="/gym">
+            <Legend><span class="fa fa-envelope"></span> Contact the trainer using this form or email the trainer directly</Legend>
+              <fieldset>
+                <div class="form-group">
+                  <label for="inputEmail" class="col-sm-2 control-label">Subject</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail" placeholder="Subject">
+                  </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                  <label for="inputPassword" class="col-sm-2 control-label">Full Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword" placeholder="Full Name">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputPassword" class="col-sm-2 control-label">Email</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPassword" placeholder="Email">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="textArea" class="col-sm-2 control-label">Message</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="9" id="textArea"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-10 col-sm-offset-2">
+                      <button type="submit" class="btn btn-primary visible-xs hidden-sm hidden-md">Send</button>
+                  </div>
+                </div>
+
+              </fieldset>
           </div>
         </div>
 
@@ -62,25 +89,18 @@
                   <strong>Email</strong>: <%= trainer.local.email %><br>
                 </div>
                  <hr>
-                <div class="text-right">
-                  <a class="btn btn-default btn-sm"> Contact Trainer </a>
-                  <a class="btn btn-default btn-sm"> Book a Class to This Gym </a>
-                </div>
               </p>
             </div>
 
-            <div class="well">
-              Write a review
+            <div class="well hidden-xs" style="padding:10px;">  
+              <button type="submit" class="btn btn-default" style="display: block; width: 100%; padding: 15px;">Send</button>
             </div>
+          </form>
+
           </div>
-
-
-
         </div>  
       </div>
     </div>
-
-
   </div>
 </body>
 </html>
