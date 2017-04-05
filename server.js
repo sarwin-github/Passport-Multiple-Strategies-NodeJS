@@ -76,13 +76,15 @@ require('./config/client-authentication/passport');
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Set Routes
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const TrainerRoute = require('./app/routes/trainer');
-const ClientRoute = require('./app/routes/client');
-const Gym = require('./app/routes/gym');
+const TrainerRestrictedRoute = require('./app/routes/trainer/trainer-restricted');
+const TrainerUnRestrictedRoute = require('./app/routes/trainer/trainer-not-restricted');
+const ClientRoute = require('./app/routes/client/client');
+const Gym = require('./app/routes/gym/gym');
 const IndexRoute = require('./app/routes/index');
 
 app.use('/', IndexRoute);
-app.use('/trainer', TrainerRoute);
+app.use('/trainer', TrainerRestrictedRoute);
+app.use('/trainer', TrainerUnRestrictedRoute);
 app.use('/client', ClientRoute);
 app.use('/gym', Gym);
 

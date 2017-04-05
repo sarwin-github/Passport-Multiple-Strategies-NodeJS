@@ -4,8 +4,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express();
-const Gym = require('../model/gym');
-const Trainer = require('../model/trainer');
+const Gym = require('../../model/gym');
+const Trainer = require('../../model/trainer');
 const csrf = require('csurf');
 
 /* Create a middleware for CSRF token creation and validation. This middleware adds a req.csrfToken() 
@@ -49,8 +49,8 @@ router.get('/', (req, res) => {
 		if(!gym){
 			return response.status(200).send({success: false, message: "Record for that gym is empty"});
 		}
-		//res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
-		res.render('gym/index', { gym: gym, user_type: req.session.type, message: message });
+		res.json({success: true, gym: gym, message: "Successfully fetched all gym"});
+		//res.render('gym/index', { gym: gym, user_type: req.session.type, message: message });
 	}) 
 });
 

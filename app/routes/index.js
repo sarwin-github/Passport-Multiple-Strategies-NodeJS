@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Gym = require('../model/gym');
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//This will be the landing page or home page
+//This will be the landing page or home page which will render the list of Gym
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/', (req, res) => {
 	let message = req.flash('message');
