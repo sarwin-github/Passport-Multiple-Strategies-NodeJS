@@ -47,10 +47,12 @@ passport.use('local.trainer.signup', new LocalStrategy({
 }, (req, email, password, done) => {
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//Check if email or password is empty, then validate error using the express-validator module
+	//This is the Backend Validation using express-validator
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     req.checkBody('email', 'Invalid Credentials, Please check email').notEmpty().isEmail();
     req.checkBody('password', 'Password should atleast contain more than six characters').notEmpty().isLength({min:6});
+    req.checkBody('name', 'Name is required').notEmpty();
+
     //Validate Error
     let errors = req.validationErrors();
     //If there's error push the error to messages[index] = error array

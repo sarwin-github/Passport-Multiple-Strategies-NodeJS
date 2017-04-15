@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const csrf = require('csurf');
+const Client = require('../../model/client');
 
 /* Create a middleware for CSRF token creation and validation. This middleware adds a req.csrfToken() 
 function to make a token which should be added to requests which mutate state, within a hidden form field, 
@@ -20,6 +21,7 @@ const isClient = (req, res, next) => {
     if(req.user.local.isClient === true || req.user.facebook.email){
         return next();
     }
+    req.flash('message', 'Sorry only client can access this route');
     res.redirect('/client/login');
 }
 
@@ -106,6 +108,52 @@ router.get('/auth/facebook', passport.authenticate('facebook.client', { scope : 
             successRedirect : '/client/profile',
             failureRedirect : '/index'
         }));
+
+
+router.get('/update', isLoggedIn, isClient, (req, res) => {
+    let messages = req.flash('message');
+    let query = Client.findById({ _id: req.user._id })
+                .select({'__v': 0, 'local.password': 0});
+
+    query.exec((err, client) => {
+        if(err){
+            return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+        }
+        if(!client){
+            return res.status(204).send({success: false, message: 'Record for that client does not exist'});
+        }
+        res.json({
+            client: client,
+            csrfToken: req.csrfToken(),
+            message: messages
+        });
+    });
+});
+
+router.put('/update', isLoggedIn, isClient, (req,res) => {
+    let query = Client.findById({ _id: req.user._id })
+                .select({'local.name': 1, 'local.birthday': 1, 'local.age': 1});
+
+    query.exec((err, client) => {
+        if(err){
+            return res.status(500).send({success:false, error: err, message: 'Something went wrong.'});
+        }
+
+        client.local.name = req.body.name;
+        client.local.birthday = req.body.birthday;
+        client.local.age = req.body.birthday;
+
+        client.save(err => {
+            if(err){
+                return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
+            }
+
+        req.flash('message', 'Successfully updated your profile');
+        req.json({trainer: trainer, message: 'Successfully updated your profile'});
+        });
+    });           
+});
+
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

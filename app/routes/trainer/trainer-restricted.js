@@ -109,7 +109,7 @@ router.get('/profile/', isLoggedIn, isTrainer, (req, res) => {
 // This will render the update form for user
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 router.get('/update', isLoggedIn, isTrainer, (req, res) => {
-    let messages = req.flash('error');
+    let messages = req.flash('message');
 
     ///Populate the referenced Gym and only show the name, description and location
     let query = Trainer.findById({ _id: req.user._id })
@@ -129,7 +129,7 @@ router.get('/update', isLoggedIn, isTrainer, (req, res) => {
         {
             trainer: trainer, 
             csrfToken: req.csrfToken(), 
-            message: messages, 
+            message: '', 
             hasErrors: messages.length > 0 
         });
     });
@@ -142,9 +142,6 @@ router.put('/update', (req, res) => {
     query.exec((err, trainer) => {
         if(err){
             return res.status(500).send({success: false, error: err, message: 'Something went wrong.'});
-        }
-        if(!trainer){
-            return res.status(204).send({success: false, message: 'Record for that trainer does not exist'});
         }
 
         trainer.local.name = req.body.name;

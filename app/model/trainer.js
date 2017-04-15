@@ -8,8 +8,8 @@ const bcrypt = require('bcrypt-nodejs');
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Regex for email validation
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-var validateEmail = function(email) {
-    var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const validateEmail = function(email) {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regex.test(email);
 };
 
@@ -33,6 +33,7 @@ const trainerSchema = mongoose.Schema({
         image           : String,
         phone           : String,
         rate            : Number,
+    //  status          : String,
         gymInfo		    : { type: Schema.Types.ObjectId, ref: 'Gym', unique: true}
 	},
 	//Data for oauth using facebook
